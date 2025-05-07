@@ -1,5 +1,5 @@
 #本地同步到云端
-git status && git add . && git commit -m "change" && git push origin main
+git status; git add .; git commit -m "change"; git push origin main
 
 #云端同步到本地
 git pull origin main
