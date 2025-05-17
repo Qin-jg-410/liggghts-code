@@ -1,5 +1,6 @@
 #本地同步到云端
 cd x:/liggghts-code
+git config --global core.autocrlf false		#希望 Git 不自动修改换行符（保持文件原样）
 git status; git add .; git commit -m "change"; git push origin main
 
 #云端同步到本地
