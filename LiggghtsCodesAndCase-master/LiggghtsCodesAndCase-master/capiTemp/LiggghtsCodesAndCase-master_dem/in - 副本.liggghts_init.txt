@@ -1,0 +1,85 @@
+echo            both
+log             ../DEM/log.liggghts
+
+atom_style      granular
+atom_modify     map array
+boundary        m m m
+newton          off
+
+communicate     single vel yes
+
+units           si
+processors      1 2 2
+
+region          reg block 0.0 0.03 0.0 0.03 0.0 0.06 units box
+create_box      1 reg
+
+neighbor        0.002 bin
+neigh_modify    delay 0
+
+soft_particles yes
+
+# Material properties required for granular pair styles
+fix         m1 all property/global youngsModulus peratomtype 2e5
+fix         m2 all property/global poissonsRatio peratomtype 0.3
+fix         m3 all property/global coefficientRestitution peratomtypepair 1 0.7
+fix         m4 all property/global coefficientFriction peratomtypepair 1 0.3
+
+#easo/capillary/viscous model fix
+
+fix 	c1 all property/global minSeparationDistanceRatio scalar 1.01				#    (value=value for the minimum separation distance, recommended as 1.01)
+fix 	c2 all property/global maxSeparationDistanceRatio scalar 1.1				#    (value=value for the maximum separation distance, recommended as 1.1)
+fix 	c3 all property/global surfaceLiquidContentInitial scalar 23				#    (value=value for the initial surface liquid volume in % of the solid volume)
+fix 	c4 all property/global surfaceTension scalar 72.8e-3						#    (value=value for the surface tension of liquid (SI units N/m))
+fix 	c5 all property/global fluidViscosity scalar 8.9e-4						#    (value=value for the fluidViscosity (SI units Pas))
+fix 	c6 all property/global contactAngle peratomtype 5.9					#    (value_i=value for contact angle of atom type i and fluid)
+
+# pair style
+#pair_style  gran model hertz tangential history #Hertzian without cohesion
+pair_style  gran model hertz tangential history cohesion easo/capillary/viscous
+pair_coeff  1 1
+
+timestep    0.00001
+
+# walls		# name of the walls are given as zwalls1, zwalls2, cylwalls
+fix     xwalls1  all wall/gran model hertz tangential history primitive type 1 xplane 0.0
+fix     xwalls2  all wall/gran model hertz tangential history primitive type 1 xplane 0.03
+fix     ywalls1  all wall/gran model hertz tangential history primitive type 1 yplane 0.0
+fix     ywalls2  all wall/gran model hertz tangential history primitive type 1 yplane 0.03
+fix     zwalls1  all wall/gran model hertz tangential history primitive type 1 zplane 0.0
+fix     zwalls2  all wall/gran model hertz tangential history primitive type 1 zplane 0.06
+
+
+
+fix         gravi all gravity 9.81 vector 0.0 0.0 -1.0
+
+# heat transfer
+fix         ftco all property/global thermalConductivity peratomtype 0.17 # lambda in [W/(K*m)]
+fix         ftca all property/global thermalCapacity peratomtype 2300    # cp in [J/(kg*K)]
+fix         heattransfer all heat/gran initial_temperature 273.15
+
+# particle distributions and insertion
+region  bc block 0.0 0.03 0.0 0.03 0.0 0.06 units box 
+fix         pts1 all particletemplate/sphere 15485863 atom_type 1 density constant 880 radius constant 5e-4
+fix         pdd1 all particledistribution/discrete 15485867 1 pts1 1.0
+
+
+fix     ins all insert/pack seed 32452843 distributiontemplate pdd1 vel constant 0. 0. -1. insert_every once overlapcheck yes all_in yes particles_in_region 500 region bc
+# apply nve integration to all particles that are inserted as single particles
+fix         integr all nve/sphere
+
+# output settings, include total thermal energy
+compute         rke all erotate/sphere
+thermo_style    custom step atoms ke c_rke f_heattransfer vol
+thermo          1000
+thermo_modify   lost ignore norm no
+compute_modify  thermo_temp dynamic yes
+
+#insert the first particles
+run             1
+dump            dmp all custom 1000 post/dump.liggghts_init id type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius f_heattransfer[0] f_heatFlux[0] f_surfaceLiquidContent[0]
+
+run             10000
+
+write_restart   post/restart/liggghts.restart
+

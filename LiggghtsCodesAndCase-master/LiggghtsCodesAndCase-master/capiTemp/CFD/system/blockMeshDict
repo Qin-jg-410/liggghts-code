@@ -1,0 +1,75 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.0                                   |
+|   \\  /    A nd           | Web:      http://www.OpenFOAM.org               |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+version  2.0;
+format   ascii;
+class       dictionary;
+object      blockMeshDict;
+}
+// ************************************
+
+
+
+
+
+
+   meshGenApp blockMesh;
+   convertToMeters 1;
+
+
+   vertices
+   (
+    (0.0 0.0 0.0) // Vertex fiveoclocksqb = 0 
+    (0.03 0.0 0.0) // Vertex sevenoclocksqb = 1 
+    (0.03 0.03 0.0) // Vertex elevenoclocksqb = 2 
+    (0.0 0.03 0.0 ) // Vertex oneoclocksqb = 3 
+  
+    ( 0.0 0.0 0.06) // Vertex fiveoclocksqb = 4 
+    (0.03 0.0 0.06) // Vertex sevenoclocksqb = 5 
+    (0.03 0.03 0.06) // Vertex elevenoclocksqb = 6 
+    (0.0 0.03 0.06) // Vertex oneoclocksqb = 7  
+   );				
+
+   blocks
+   (
+    //square block
+    hex (0 1 2 3 4 5 6 7) (15 15 30) simpleGrading (1 1 1)
+   );
+
+
+   //create the quarter circles
+   edges
+   (
+   );
+
+   patches
+   (
+    patch inlet
+    (
+     (0 3 2 1)
+    )
+
+    patch outlet
+    (
+     (4 5 6 7)
+    )
+
+    wall wall
+    (
+     (1 2 6 5)
+     (2 3 7 6)
+     (0 4 7 3)
+     (0 1 5 4)
+    )
+
+);
+
+mergePatchPairs
+(
+);

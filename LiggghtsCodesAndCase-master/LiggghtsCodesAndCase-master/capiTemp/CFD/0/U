@@ -1,0 +1,46 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.6                                   |
+|   \\  /    A nd           | Web:      http://www.OpenFOAM.org               |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    object      U;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (0 0 0);		// initially no velocity anywhere 
+
+boundaryField
+{
+
+    wall
+    {
+        type            noSlip;		// free slip boundary condition at wall
+    }
+
+    inlet
+    {
+        type             uniformFixedValue;
+        uniformValue     table   // tabulated velocity profile : changes with time
+        (
+            (0.000 (0 0 0.5))   //(time (vx vy vz)) -- velocity profile at this particular time
+            (1.000 (0 0 1.75))
+            (2.000 (0 0 3.0))
+        );
+    }
+
+    outlet
+    {
+        type            zeroGradient;			// gradient of velocity is always zero at pressure otlet boundary
+    }
+}
+
+// ************************************************************************* //
