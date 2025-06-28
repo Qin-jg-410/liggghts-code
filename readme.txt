@@ -20,3 +20,7 @@ git remote set-url origin ${url}
  
 # 同步代码
 git pull origin main
+
+
+#终端运行
+python git_automator.py
