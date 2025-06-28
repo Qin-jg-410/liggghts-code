@@ -1,0 +1,5 @@
+mpirun -np 8 lmp380 -in sim_2.15r_1A30f_vertical.ritb
+mpirun -np 8 lmp380 -in sim_2.15r_1A30f_horizontal.ritb
+mpirun -np 8 lmp380 -in sim_2.15r_1A30f_rotating.ritb
+mpirun -np 8 lmp380 -in sim_2.15r_1A30f_inclined45.ritb
+mpirun -np 8 lmp380 -in sim_2.15r_1A30f_balancing.ritb

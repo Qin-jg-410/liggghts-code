@@ -1,0 +1,7 @@
+DB-Name: db-kmc
+Full-DB: true
+GitHub-push: false
+Wanos:
+- Dict-Name: kmc_results.yml
+  Wano-Name: KMC
+github credentials: git_file.yml

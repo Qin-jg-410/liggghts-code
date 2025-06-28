@@ -1,0 +1,122 @@
+### "yplane_finite_porous" PRIMITIVE SHAPE PARAMETERS
+# param[0] = position of the y-plane (The y coordinate, meaning the rectangle will be on the x, z dimensions)
+# param[1] = first coordinate of the left-bottom end of the rectangle (x, HOR)
+# param[2] = other coordinate of the left-bottom end of the rectangle (z, VER)
+# param[3] = np_ver (integer number of pores in the vertical (z) direction; must be >= 1)
+# param[4] = np_hor (integer number of pores in a horizontal (x); must be >= 1)
+# param[5] = A_ver (height of the rectangle)
+# param[6] = A_hor (length of the rectangle)
+# param[7] = fvoid_ver (fractional distance in vertical repeating cell which is void)
+# param[8] = fvoid_hor (fractional distance in horizontal repeating cell which is void)
+# param[9] = ftransition_ver (fractional distance in vertical repeating cell which is void + transition)
+# param[10] = ftransition_hor (fractional distance in horizontal repeating cell which is void + transition)
+# param[11] = shape (dummy double variable, put 0.0)
+
+### USE EXAMPLE
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous -1.0 -1.0 -1.0 6 4 6.0 8.0 0.25 0.125 0.2501 0.12505 0.0
+#create_atoms 1 single 1.12500 -0.39990 0.12500 # x, y, z coordinates of particle of type 1
+#set type 1 diameter 0.2 density 2650 vx 0.0 vy -0.6001 vz 0.0 
+
+units si #   
+dimension 3 #   
+newton off #   
+boundary f f f #   
+atom_style sphere #   
+pair_style gran model hertz tangential history #   
+communicate single vel yes #   
+region simulationdomain block -0.005905 0.167905 -0.000656 0.011154 -0.005905 0.167905 #
+create_box 3 simulationdomain #
+
+fix top all wall/gran model hertz tangential history primitive type 2 yplane 0.005256#
+fix left all wall/gran model hertz tangential history primitive type 2 xplane 0.0#
+fix right all wall/gran model hertz tangential history primitive type 2 xplane 0.162001#
+fix front all wall/gran model hertz tangential history primitive type 2 zplane 0.0#
+fix back all wall/gran model hertz tangential history primitive type 2 zplane 0.162001#
+
+#fix filtermesh all mesh/surface file cal_mesh.stl type 2 scale 1 #     
+#fix meshwall all wall/gran model hertz tangential history mesh n_meshes 1 meshes filtermesh #   
+
+#Case 1
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.14074074074074	0.14074074074074	0.21851851851852	0.21851851851852 0.0 #    
+#Case 2
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.16407407407407	0.16407407407407	0.17185185185185	0.17185185185185 0.0 #    
+#Case 3
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.16640740740741	0.16640740740741	0.16718518518519	0.16718518518519 0.0 #       
+#Case 4
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.16664074074074	0.16664074074074	0.16671851851852	0.16671851851852 0.0 #    
+#Case 5
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.16666407407407	0.16666407407407	0.16667185185185	0.16667185185185 0.0 #    
+
+#Case 6
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.16148148148148 0.16148148148148	0.17703703703704	0.17703703703704 0.0 #    
+#Case 7
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.16614814814815 0.16614814814815 0.16770370370370	0.16770370370370 0.0 #    
+
+#Case 8
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.16320987654321 0.16320987654321	0.17358024691358	0.17358024691358 0.0 #    
+#Case 9
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.16562962962963 0.16562962962963	0.16874074074074	0.16874074074074 0.0 #    
+
+#Case 10
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.15629629629630 0.15629629629630	0.18740740740741	0.18740740740741 0.0 #   
+
+#Case 11
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.16126543209877 0.16126543209877	0.17746913580247	0.17746913580247 0.0 #   
+
+#Case 12
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.15669515669516 0.15669515669516	0.18660968660969	0.18660968660969 0.0 #   
+
+#Case 13
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.15802469135803	0.15802469135803	0.18395061728395	0.18395061728395 0.0 #   
+#Case 14
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.16018518518519	0.16018518518519	0.17962962962963	0.17962962962963 0.0 #   
+
+#Case 15
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.16493827160494	0.16493827160494	0.17012345679012	0.17012345679012 0.0 #    
+#Case 16
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.16537037037037	0.16537037037037	0.16925925925926	0.16925925925926 0.0 #    
+#Case 17
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.16580246913580	0.16580246913580	0.16839506172840	0.16839506172840 0.0 #       
+#Case 18
+fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.16592592592593	0.16592592592593	0.16814814814815	0.16814814814815 0.0 #    
+#Case 19
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.16601851851852	0.16601851851852	0.16796296296296	0.16796296296296 0.0 #    
+#Case 20
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.16609053497942	0.16609053497942	0.16781893004115	0.16781893004115 0.0 #    
+#Case 21
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.16623456790124	0.16623456790124	0.16753086419753	0.16753086419753 0.0 #    
+#Case 22
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.16629629629630	0.16629629629630	0.16740740740741	0.16740740740741 0.0 #    
+#Case 23
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.16634259259259	0.16634259259259	0.16731481481482	0.16731481481482 0.0 #    
+#Case 24
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.16637860082305	0.16637860082305	0.16724279835391	0.16724279835391 0.0 #   
+
+
+fix Young_mod all property/global youngsModulus peratomtype 375000000 46000000 1000000000 #   
+fix Poisson_rat all property/global poissonsRatio peratomtype 0.32 0.42 0.29 #   
+fix Coeff_rest all property/global coefficientRestitution peratomtypepair 3 0.15 0.32 0.475 0.32 0.49 0.645 0.475 0.645 0.8 #   
+fix Coeff_fric all property/global coefficientFriction peratomtypepair 3 0.04 0.145 0.12 0.145 0.25 0.225 0.12 0.225 0.2 #   
+ 
+neighbor 0.00026244 bin #   
+neigh_modify delay 0 one 100000 page 5000000 #   
+fix r_0to10p all particletemplate/sphere 12345787 atom_type 1 density constant 2650 radius constant 4.2e-05 #   
+fix r_10to50p all particletemplate/sphere 15485863 atom_type 1 density constant 2650 radius constant 0.000116 #   
+fix r_50to90p all particletemplate/sphere 15485867 atom_type 1 density constant 2650 radius constant 0.000423 #   
+fix r_90to100p all particletemplate/sphere 32452843 atom_type 1 density constant 2650 radius constant 0.000656 #   
+fix prob_par all particledistribution/discrete 32452867 4 r_0to10p 0.1 r_10to50p 0.4 r_50to90p 0.4 r_90to100p 0.1 #   
+pair_coeff * * #   
+timestep 1e-08 #
+ 
+fix nve_group all nve/sphere #
+#fix grav all gravity 9.81 vector 0 -1 0
+ 
+variable step equal step #   
+variable mycount equal count(all) #   
+fix print_amount_of_atoms all print 1 "${step} ${mycount}" file numatoms.txt screen no #   
+run 0 #   
+run 1 #   
+read_dump dump.atom_info_1 1 x y z radius vx vy vz box no add yes replace no #   
+set atom * type 1 density 2650 vy -7.0 #      
+dump dump_1 all custom 5000 dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 120000

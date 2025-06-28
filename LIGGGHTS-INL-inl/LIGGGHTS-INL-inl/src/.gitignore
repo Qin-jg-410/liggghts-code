@@ -1,0 +1,21 @@
+Obj*/*
+style_*.h
+lmp_*
+version_liggghts.h
+style_cohesion_model.h
+.*.sw?
+debug_make_auto
+liblmp_*
+liblammps*
+libliggghts.so
+MAKE/Makefile.user*
+!MAKE/Makefile.user_default
+!MAKE/Makefile.user_default_patch_*
+MAKE/Makefile.auto.options*
+STUBS/libmpi_stubs.a
+STUBS/mpi.o
+MAKE/auto_backup/*
+# Emacs tmp files
+*~
+\#*\#
+.\#*

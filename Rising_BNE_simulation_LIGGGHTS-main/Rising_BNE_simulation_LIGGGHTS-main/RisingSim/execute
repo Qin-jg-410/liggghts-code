@@ -1,0 +1,5 @@
+mpirun -np 8 lmp380 -in sim_2.3r_1A30f.ritb
+mpirun -np 8 lmp380 -in sim_2.6r_1A10f.ritb
+mpirun -np 8 lmp380 -in sim_2.6r_1A30f.ritb
+mpirun -np 8 lmp380 -in sim_2.6r_1A90f.ritb
+mpirun -np 8 lmp380 -in sim_2.6r_2A30f.ritb

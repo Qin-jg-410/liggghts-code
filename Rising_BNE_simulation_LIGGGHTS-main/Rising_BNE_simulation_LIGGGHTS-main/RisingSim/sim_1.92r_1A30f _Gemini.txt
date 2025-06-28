@@ -1,0 +1,251 @@
+#INITALIZATION
+atom_style      granular
+#atom_modify     map array	#no se para que es
+
+boundary	f f f			#fixed boundaries -> particles will be deleted if leaving the simulation box
+
+units		si
+
+communicate	single vel yes	#default
+
+newton		off				#default
+
+hard_particles yes
+
+###################################System variables##################################################################
+
+#Definition of boundaries
+variable xmin equal -0.2
+variable xmax equal 0.2
+
+variable ymin equal -0.2
+variable ymax equal 0.2
+
+variable zmin equal -0.2
+variable zmax equal 0.3
+
+#Definition of the timestep
+
+variable dt equal 1e-6		#timestep = 0.00001 second;
+# Each iteration step represents 0.0001 seconds. # 此注释可能存在笔误，已注释掉以避免混淆
+
+###################################Specific variables for current simulation#########################################
+
+# 将 natoms 从 3 改为 2，因为现在只有普通颗粒和容器两种类型，入侵者颗粒被归类为普通颗粒的一种半径类型
+variable natoms equal 2 	#1 -> granular #2->container
+
+####variable for material properties####
+
+####Young Modulus####
+variable	youngmodulus1	equal 	7e9		#N/mm²
+# youngmodulus2 和 youngmodulus3 不再直接用于颗粒类型 2 或 3，而是用于颗粒类型 1 和容器
+variable	youngmodulus2	equal 	7e9		#N/mm²
+variable	youngmodulus_container	equal 	7e9		#N/mm²
+
+####Poission ratio####
+variable 	poission1	equal	0.35
+# poission2 和 poission3 不再直接用于颗粒类型 2 或 3，而是用于颗粒类型 1 和容器
+variable 	poission2	equal	0.35
+variable 	poission_container	equal	0.35
+
+####variable for contact properties####
+
+####coefficient of restitution####
+# 简化为基于两种原子类型（颗粒和容器）的接触恢复系数
+variable	CoR11	equal	0.6
+variable	CoR1_container	equal	0.6
+variable	CoR_container1	equal	0.6
+variable	CoR_container_container	equal	0.6
+
+
+####sliding friction coefficient####
+# 简化为基于两种原子类型（颗粒和容器）的接触滑动摩擦系数
+variable	sf11	equal	0.3
+variable	sf1_container	equal	0.36
+variable	sf_container1	equal	0.36
+variable	sf_container_container	equal	0.3
+
+####rolling friction coefficient####
+# 简化为基于两种原子类型（颗粒和容器）的接触滚动摩擦系数
+variable	rf11	equal	0.8
+variable	rf1_container	equal	0.8
+variable	rf_container1	equal	0.8
+variable	rf_container_container	equal	0.8
+
+
+####variable for particles (now including intruder as a radius type)####
+
+#Number of particle radius
+variable	nradii	equal	2 # 现在有两种半径类型
+
+variable	radius1	equal	0.004825	#m # 小颗粒半径
+variable	radius2	equal	0.0192	#m # 大颗粒（原入侵者）半径
+
+variable	frac1	equal	0.5	# 绝大多数是小颗粒
+variable	frac2	equal	0.5	# 极少量的大颗粒作为入侵者（为了确保只插入一个，可能需要更精细的控制，例如在插入后筛选）
+
+variable	density	equal	1260	#kg/m³ # 所有颗粒的密度相同
+
+####filling parameters####
+
+variable	filltime	equal	0.5		#seconds
+
+variable	fillmass	equal	0.01	#kg
+
+variable	fillmassrate	equal	${fillmass}/${filltime}	#kg/s
+
+variable	fillsteps	equal	${filltime}/${dt}		#Transform time to iteration steps
+
+####settle time####
+
+variable	settletime	equal	0.5 #second
+
+variable	settlesteps	equal	${settletime}/${dt}		#Transform time to iteration steps
+
+
+####shaking time#####
+
+variable	shakingtime	equal	10 #seconds
+
+variable	shakingsteps	equal	${shakingtime}/${dt}	#Transform time to iteration steps
+
+
+####settle time 2####
+
+variable	settletime2	equal	1 #second
+
+variable	settlesteps2	equal	${settletime2}/${dt}		#Transform time to iteration steps # 修正：这里使用 settletime2
+
+
+###################################Definition of simulationbox#######################################################
+
+region		reg block ${xmin} ${xmax} ${ymin} ${ymax} ${zmin} ${zmax} units box
+
+create_box	${natoms} reg # 使用新的 natoms 变量
+
+neighbor	0.004 bin		#default
+
+neigh_modify	delay 0		#default
+
+#################################Definition of the contact models####################################################
+
+pair_style gran model hertz tangential history	#contact model
+
+pair_coeff	* *				#default
+
+timestep ${dt}
+
+thermo          5000
+
+fix		integrator all nve/sphere			#default
+
+fix		gravi all gravity 9.81 vector 0.0 0.0 -1.0		#gravity of 9.81 m/s² in negative z direction
+
+
+###################################Definition of Material properties#################################################
+
+# 颗粒类型 1 的杨氏模量和泊松比
+fix 		m1 all property/global youngsModulus peratomtype ${youngmodulus1} ${youngmodulus_container}
+fix 		m2 all property/global poissonsRatio peratomtype ${poission1} ${poission_container}
+
+# 接触恢复系数，现在是颗粒-颗粒，颗粒-容器，容器-颗粒，容器-容器
+fix 		m3 all property/global coefficientRestitution peratomtypepair ${natoms} ${CoR11} ${CoR1_container} ${CoR_container1} ${CoR_container_container}
+
+# 接触滑动摩擦系数
+fix 		m4 all property/global coefficientFriction peratomtypepair ${natoms} ${sf11} ${sf1_container} ${sf_container1} ${sf_container_container}
+
+# 接触滚动摩擦系数
+fix 		m5 all property/global coefficientRollingFriction peratomtypepair ${natoms} ${rf11} ${rf1_container} ${rf_container1} ${rf_container_container}
+
+
+###################################Generation and Loading of the Geometry .stl#######################################
+
+fix			container 	all mesh/surface file meshes/cylinder.stl	type 2 # 容器现在是 atom_type 2，与 natoms 保持一致
+# Scale down to transform mm to meters          # 保持原始注释
+
+fix 		walls 	all wall/gran model hertz tangential history mesh n_meshes 1 meshes container
+
+
+
+###################################Generation and Insertion of the particles#########################################
+
+# 定义两种半径的颗粒模板，都属于 atom_type 1
+fix		pts_small all particletemplate/sphere 10487 atom_type 1 density constant ${density} radius constant ${radius1}	
+fix		pts_large all particletemplate/sphere 11887 atom_type 1 density constant ${density} radius constant ${radius2}	
+
+# 离散颗粒分布，包含两种半径类型
+fix 	pdd all particledistribution/discrete 32452867 ${nradii} pts_small ${frac1} pts_large ${frac2} # 使用 pts_small 和 pts_large
+
+fix		ins_mesh all mesh/surface/planar file meshes/Insertionsface2.stl type 2 # 插入面类型与容器类型一致
+#fix		ins_mesh_int all mesh/surface/planar file meshes/InsertionsfaceInt3.stl type 3
+
+
+# 颗粒组定义
+group           granular type 1 # 统一所有颗粒为 granular 类型
+group           container_mesh type 2 # 明确容器网格的类型
+
+# 插入区域现在只针对颗粒
+region reg_part cylinder z 0 0 0.048 0.05 0.188 units box
+
+
+# 修改插入次序：先插入所有颗粒（包括大颗粒作为入侵者），然后进行沉降
+# fix             ins_intr intruder insert/pack ... (此部分移除，入侵者将通过流式插入)
+
+# 统一颗粒插入
+fix 	ins_all granular insert/stream seed 86028157 verbose yes distributiontemplate pdd &
+          nparticles 500 particlerate 20e06 overlapcheck yes all_in no vel constant 0 0 -0.5 &
+          insertion_face ins_mesh extrude_length 0.02
+
+
+run             ${fillsteps} # 使用 fillsteps 填充颗粒
+
+unfix ins_all # 填充完成后取消插入修正
+unfix ins_mesh # 取消插入面修正
+
+###################################Dumping of the data for post-processing to visualize############################
+shell rm -r porcelain_1.92r_1A30f
+shell 	mkdir porcelain_1.92r_1A30f
+
+#Definition of the dumptime
+variable dumptime equal 0.01	# Every 0.01 s 1 image
+
+variable dumpstep equal ${dumptime}/${dt}	#Transform to iteration steps
+
+
+dump	dmpparticle granular custom/vtk ${dumpstep} porcelain_1.92r_1A30f/particles_*.vtk id type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius mass
+
+# 需要针对入侵者（大颗粒）进行单独的dump，这可以通过 atom_type 或 radius 来过滤
+# 假设入侵者是原子类型 1 中半径为 radius2 的颗粒
+group intruder_large_radius type 1 radius ${radius2} # 识别大颗粒为入侵者
+dump	dmpintruder intruder_large_radius custom/vtk ${dumpstep} porcelain_1.92r_1A30f/intruder_*.vtk id type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius mass
+
+dump	dmpcontainer container_mesh mesh/stl ${dumpstep} porcelain_1.92r_1A30f/container*.stl container
+
+# dmpparticle2 已不再需要，因为 granular 组已包含所有颗粒
+# dump	dmpparticle2 grains2 custom/vtk ${dumpstep} porcelain_1.92r_1A30f/particles2_*.vtk id type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius mass
+
+
+####################################RUN the simulation filling###########################################################
+# 填充阶段已在上面完成，这里仅作为标记
+#unfix	ins_part # 原始代码中的 unfix
+#fix 	ins_part2 grains2 insert/stream ... # 原始代码中的第二个插入阶段
+#run 500000 # 原始代码中的运行
+#unfix	ins_part2 # 原始代码中的 unfix
+#unfix ins_mesh # 原始代码中的 unfix
+
+##################################RUN the simulation settling#############################################################
+
+run	 ${settlesteps} # 运行沉降阶段
+
+
+#################################RUN the simulation shaking#############################################################
+fix             shaking all move/mesh mesh container wiggle amplitude 0 0 0.01 period 0.033 #Gamma = 4
+#fix zpos intruder print 10000 "$z" file porcelain_1.92r_1A30f/coord_intr.txt
+dump	dmpintruder2 intruder_large_radius custom/vtk ${dumpstep} porcelain_1.92r_1A30f/intruder_zpos.vtk z # 针对大颗粒入侵者输出 Z 坐标
+run	 ${shakingsteps}
+unfix           shaking
+
+
+#################################RUN the simulation settling 2 ###############################################################
+
+run	 ${settlesteps2}

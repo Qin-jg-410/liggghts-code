@@ -1,0 +1,476 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>read_restart command &mdash; LIGGGHTS v4.X documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="Manual.html" class="icon icon-home"> LIGGGHTS
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v4.X
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="Section_intro.html">1. Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Section_intro.html#what-is-liggghts-r-inl">1.1. What is LIGGGHTS(R)-INL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_intro.html#liggghts-public-vs-liggghts-premium">1.2. LIGGGHTS-PUBLIC VS. LIGGGHTS-PREMIUM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_intro.html#history">1.3. History</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_intro.html#liggghts-r-inl-features">1.4. LIGGGHTS(R)-INL features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_intro.html#liggghts-r-inl-general-features">1.5. LIGGGHTS(R)-INL General features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_intro.html#liggghts-r-inl-model-features-liggghts-public-features">1.6. LIGGGHTS(R)-INL Model features: LIGGGHTS-PUBLIC features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_intro.html#liggghts-r-inl-model-features-additional-features-for-liggghts-r-inl">1.7. LIGGGHTS(R)-INL Model features: Additional features for LIGGGHTS(R)-INL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_intro.html#open-source-distribution">1.8. Open source distribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_intro.html#acknowledgments-and-citations">1.9. Acknowledgments and citations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Section_start.html">2. Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Section_start.html#how-to-obtain-liggghts-r-inl">2.1. How to obtain LIGGGHTS(R)-INL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_start.html#making-liggghts-r-inl">2.2. Making LIGGGHTS(R)-INL</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Section_start.html#read-this-first">2.2.1. <strong>Read this first:</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_start.html#steps-to-build-a-liggghts-r-inl-executable">2.2.2. <strong>Steps to build a LIGGGHTS(R)-INL executable:</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_start.html#advanced-building-using-custom-makefiles">2.2.3. <strong>Advanced building using custom makefiles</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_start.html#errors-that-can-occur-when-making-liggghts-r-inl">2.2.4. <strong>Errors that can occur when making LIGGGHTS(R)-INL:</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_start.html#additional-build-tips">2.2.5. <strong>Additional build tips:</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_start.html#building-for-a-mac">2.2.6. <strong>Building for a Mac:</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_start.html#building-for-windows">2.2.7. <strong>Building for Windows:</strong></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Section_start.html#making-liggghts-r-inl-with-optional-packages">2.3. Making LIGGGHTS(R)-INL with optional packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_start.html#building-liggghts-r-inl-via-the-make-py-script">2.4. Building LIGGGHTS(R)-INL via the Make.py script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_start.html#building-liggghts-r-inl-as-a-library">2.5. Building LIGGGHTS(R)-INL as a library</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Section_start.html#static-library">2.5.1. <strong>Static library:</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_start.html#shared-library">2.5.2. <strong>Shared library:</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_start.html#additional-requirement-for-using-a-shared-library">2.5.3. <strong>Additional requirement for using a shared library:</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_start.html#calling-the-liggghts-r-inl-library">2.5.4. <strong>Calling the LIGGGHTS(R)-INL library:</strong></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Section_start.html#running-liggghts-r-inl">2.6. Running LIGGGHTS(R)-INL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_start.html#command-line-options">2.7. Command-line options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_start.html#liggghts-r-inl-screen-output">2.8. LIGGGHTS(R)-INL screen output</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Section_input_script.html">3. Input Script</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Section_input_script.html#liggghts-r-inl-input-script">3.1. LIGGGHTS(R)-INL input script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_input_script.html#parsing-rules">3.2. Parsing rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_input_script.html#input-script-structure">3.3. Input script structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_input_script.html#an-example-input-script">3.4. An example input script</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Section_commands.html">4. Commands</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Section_commands.html#list-of-all-commands">4.1. List of all commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_commands.html#bond-style-potentials">4.2. bond_style potentials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_commands.html#compute-styles">4.3. compute styles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_commands.html#dump-styles">4.4. dump styles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_commands.html#fix-styles">4.5. fix styles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_commands.html#pair-style-potentials">4.6. pair_style potentials</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Section_gran_models.html">5. Contact models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Section_gran_models.html#cohesion-commands">5.1. cohesion commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_gran_models.html#model-commands">5.2. model commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_gran_models.html#rolling-friction-commands">5.3. rolling_friction commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_gran_models.html#surface-commands">5.4. surface commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_gran_models.html#tangential-commands">5.5. tangential commands</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Section_mesh_modules.html">6. Mesh modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Section_mesh_modules.html#module-commands">6.1. module commands</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Section_packages.html">7. Packages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Section_howto.html">8. How-to discussions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Section_howto.html#restarting-a-simulation">8.1. Restarting a simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_howto.html#d-simulations">8.2. 2d simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_howto.html#running-multiple-simulations-from-one-input-script">8.3. Running multiple simulations from one input script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_howto.html#granular-models">8.4. Granular models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_howto.html#coupling-liggghts-r-inl-to-other-codes">8.5. Coupling LIGGGHTS(R)-INL to other codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_howto.html#visualizing-liggghts-r-inl-snapshots">8.6. Visualizing LIGGGHTS(R)-INL snapshots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_howto.html#triclinic-non-orthogonal-simulation-boxes">8.7. Triclinic (non-orthogonal) simulation boxes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_howto.html#output-from-liggghts-r-inl-thermo-dumps-computes-fixes-variables">8.8. Output from LIGGGHTS(R)-INL (thermo, dumps, computes, fixes, variables)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Section_howto.html#global-per-atom-local-data">8.8.1. Global/per-atom/local data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_howto.html#scalar-vector-array-data">8.8.2. Scalar/vector/array data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_howto.html#thermodynamic-output">8.8.3. Thermodynamic output</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_howto.html#dump-file-output">8.8.4. Dump file output</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_howto.html#fixes-that-write-output-files">8.8.5. Fixes that write output files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_howto.html#computes-that-process-output-quantities">8.8.6. Computes that process output quantities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_howto.html#fixes-that-process-output-quantities">8.8.7. Fixes that process output quantities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_howto.html#computes-that-generate-values-to-output">8.8.8. Computes that generate values to output</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_howto.html#fixes-that-generate-values-to-output">8.8.9. Fixes that generate values to output</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_howto.html#variables-that-generate-values-to-output">8.8.10. Variables that generate values to output</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_howto.html#summary-table-of-output-options-and-data-flow-between-commands">8.8.11. Summary table of output options and data flow between commands</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Section_howto.html#walls">8.9. Walls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_howto.html#library-interface-to-liggghts-r-inl">8.10. Library interface to LIGGGHTS(R)-INL</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Section_modify.html">9. Modifying &amp; extending LIGGGHTS(R)-INL</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Section_modify.html#atom-styles">9.1. Atom styles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_modify.html#compute-styles">9.2. Compute styles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_modify.html#dump-styles">9.3. Dump styles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_modify.html#dump-custom-output-options">9.4. Dump custom output options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_modify.html#fix-styles">9.5. Fix styles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_modify.html#input-script-commands">9.6. Input script commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_modify.html#pairwise-potentials">9.7. Pairwise potentials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_modify.html#region-styles">9.8. Region styles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_modify.html#thermodynamic-output-options">9.9. Thermodynamic output options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_modify.html#variable-options">9.10. Variable options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_modify.html#submitting-new-features-for-inclusion-in-liggghts-r-inl">9.11. Submitting new features for inclusion in LIGGGHTS(R)-INL</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Section_python.html">10. Python interface to LIGGGHTS(R)-INL</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Section_python.html#building-liggghts-r-inl-as-a-shared-library">10.1. Building LIGGGHTS(R)-INL as a shared library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_python.html#installing-the-python-wrapper-into-python">10.2. Installing the Python wrapper into Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_python.html#extending-python-with-mpi-to-run-in-parallel">10.3. Extending Python with MPI to run in parallel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_python.html#testing-the-python-liggghts-r-inl-interface">10.4. Testing the Python-LIGGGHTS(R)-INL interface</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Section_python.html#test-liggghts-r-inl-and-python-in-serial">10.4.1. <strong>Test LIGGGHTS(R)-INL and Python in serial:</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_python.html#test-liggghts-r-inl-and-python-in-parallel">10.4.2. <strong>Test LIGGGHTS(R)-INL and Python in parallel:</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_python.html#running-python-scripts">10.4.3. <strong>Running Python scripts:</strong></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Section_python.html#using-liggghts-r-inl-from-python">10.5. Using LIGGGHTS(R)-INL from Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_python.html#example-python-scripts-that-use-liggghts-r-inl">10.6. Example Python scripts that use LIGGGHTS(R)-INL</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Section_errors.html">11. Errors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Section_errors.html#common-problems">11.1. Common problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_errors.html#reporting-bugs">11.2. Reporting bugs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_errors.html#error-warning-messages">11.3. Error &amp; warning messages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_errors.html#error">11.4. Errors:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_errors.html#warnings">11.5. Warnings:</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="Manual.html">LIGGGHTS</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="Manual.html">Docs</a> &raquo;</li>
+        
+      <li>read_restart command</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/read_restart.txt" rel="nofollow"> View page source</a>
+          
+          <a href="http://www.cfdem.com"> Website</a>
+          
+            <a href="Section_commands.html#comm" rel="nofollow"> Commands</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+  
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="read-restart-command">
+<span id="index-0"></span><h1>read_restart command<a class="headerlink" href="#read-restart-command" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="syntax">
+<h2>Syntax<a class="headerlink" href="#syntax" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>read_restart file
+</pre></div>
+</div>
+<ul class="simple">
+<li>file = name of binary restart file to read in</li>
+</ul>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>read_restart save.10000
+read_restart restart.*
+read_restart poly.*.%
+</pre></div>
+</div>
+</div>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>Read in a previously saved simulation from a restart file.  This
+allows continuation of a previous run.  Information about what is
+stored in a restart file is given below.</p>
+<p>Restart files are saved in binary format to enable exact restarts,
+meaning that the trajectories of a restarted run will precisely match
+those produced by the original run had it continued on.</p>
+<p>Several things can prevent exact restarts due to round-off effects, in
+which case the trajectories in the 2 runs will slowly diverge.  These
+include running on a different number of processors or changing
+certain settings such as those set by the <a class="reference internal" href="newton.html"><em>newton</em></a> or
+<a class="reference internal" href="processors.html"><em>processors</em></a> commands.  LIGGGHTS(R)-INL will issue a warning in
+these cases.</p>
+<p>Certain fixes will not restart exactly, though they should provide
+statistically similar results.</p>
+<p>Certain pair styles will not restart exactly, though they should
+provide statistically similar results.  This is because the forces
+they compute depend on atom velocities, which are used at half-step
+values every timestep when forces are computed.  When a run restarts,
+forces are initially evaluated with a full-step velocity, which is
+different than if the run had continued.  These pair styles include
+<a class="reference internal" href="pair_gran.html"><em>granular pair styles</em></a>.</p>
+<p>If a restarted run is immediately different than the run which
+produced the restart file, it could be a LIGGGHTS(R)-INL bug, so consider
+<a class="reference internal" href="Section_errors.html#err-2"><span>reporting it</span></a> if you think the behavior is
+wrong.</p>
+<p>Because restart files are binary, they may not be portable to other
+machines.  In this case, you can use the <a class="reference internal" href="Section_start.html#start-7"><span>-r command-line switch</span></a> to convert a restart file to a data
+file.</p>
+<p>Similar to how restart files are written (see the
+<a class="reference internal" href="write_restart.html"><em>write_restart</em></a> and <a class="reference internal" href="restart.html"><em>restart</em></a>
+commands), the restart filename can contain two wild-card characters.
+If a &#8220;*&#8221; appears in the filename, the directory is searched for all
+filenames that match the pattern where &#8220;*&#8221; is replaced with a timestep
+value.  The file with the largest timestep value is read in.  Thus,
+this effectively means, read the latest restart file.  It&#8217;s useful if
+you want your script to continue a run from where it left off.  See
+the <a class="reference internal" href="run.html"><em>run</em></a> command and its &#8220;upto&#8221; option for how to specify
+the run command so it doesn&#8217;t need to be changed either.</p>
+<p>If a &#8220;%&#8221; character appears in the restart filename, LIGGGHTS(R)-INL expects a
+set of multiple files to exist.  The <a class="reference internal" href="restart.html"><em>restart</em></a> and
+<a class="reference internal" href="write_restart.html"><em>write_restart</em></a> commands explain how such sets are
+created.  Read_restart will first read a filename where &#8220;%&#8221; is
+replaced by &#8220;base&#8221;.  This file tells LIGGGHTS(R)-INL how many processors
+created the set and how many files are in it.  Read_restart then reads
+the additional files.  For example, if the restart file was specified
+as save.% when it was written, then read_restart reads the files
+save.base, save.0, save.1, ... save.P-1, where P is the number of
+processors that created the restart file.  The processors in the
+current LIGGGHTS(R)-INL simulation share the work of reading these files; each
+reads a roughly equal subset of the files.  The number of processors
+which created the set can be different the number of processors in the
+current LIGGGHTS(R)-INL simulation.  This can be a fast mode of input on
+parallel machines that support parallel I/O.</p>
+<hr class="docutils" />
+<p>A restart file stores the following information about a simulation:
+units and atom style, simulation box size and shape and boundary
+settings, group definitions, per-type atom settings such as mass,
+per-atom attributes including their group assignments and molecular
+topology attributes, force field styles and coefficients, and
+<code class="xref doc docutils literal"><span class="pre">special_bonds</span></code> settings.  This means that commands
+for these quantities do not need to be re-specified in the input
+script that reads the restart file, though you can redefine settings
+after the restart file is read.</p>
+<p>One exception is that some pair styles do not store their info in
+restart files.  The doc pages for individual pair styles note if this
+is the case.  This is also true of bond_style hybrid (and angle_style,
+dihedral_style, improper_style hybrid).</p>
+<p>All settings made by the <code class="xref doc docutils literal"><span class="pre">pair_modify</span></code> command,
+such as the shift and tail settings, are stored in the restart file
+with the pair style.  The one exception is the <code class="xref doc docutils literal"><span class="pre">pair_modify</span> <span class="pre">compute</span></code> setting is not stored.</p>
+<p>The list of <a class="reference internal" href="fix.html"><em>fixes</em></a> used for a simulation is not stored in
+the restart file.  This means the new input script should specify all
+fixes it will use.  Note that some fixes store an internal &#8220;state&#8221;
+which is written to the restart file.  This allows the fix to continue
+on with its calculations in a restarted simulation.  To re-enable such
+a fix, the fix command in the new input script must use the same
+fix-ID and group-ID as was used in the input script that wrote the
+restart file.  If a match is found, LIGGGHTS(R)-INL prints a message indicating
+that the fix is being re-enabled.  If no match is found before the
+first run or minimization is performed by the new script, the &#8220;state&#8221;
+information for the saved fix is discarded.  See the doc pages for
+individual fixes for info on which ones can be restarted in this
+manner.</p>
+<p>Bonds that are broken (e.g. by a bond-breaking potential) are written
+to the restart file as broken bonds with a type of 0.  Thus these
+bonds will still be broken when the restart file is read.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">No other information is stored in the restart file.
+This means that an input script that reads a restart file should
+specify settings for quantities like <a class="reference internal" href="timestep.html"><em>timestep size</em></a>,
+<a class="reference internal" href="thermo_style.html"><em>thermodynamic</em></a>, <a class="reference internal" href="neighbor.html"><em>neighbor list</em></a>
+criteria including settings made via the
+<a class="reference internal" href="neigh_modify.html"><em>neigh_modify</em></a> comand, <a class="reference internal" href="dump.html"><em>dump</em></a> file
+output, <a class="reference internal" href="region.html"><em>geometric regions</em></a>, etc.</p>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="restrictions">
+<h2>Restrictions<a class="headerlink" href="#restrictions" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div>none</div></blockquote>
+</div>
+<div class="section" id="related-commands">
+<h2>Related commands<a class="headerlink" href="#related-commands" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="read_data.html"><em>read_data</em></a>, <a class="reference internal" href="read_dump.html"><em>read_dump</em></a>,
+<a class="reference internal" href="write_restart.html"><em>write_restart</em></a>, <a class="reference internal" href="restart.html"><em>restart</em></a></p>
+<p><strong>Default:</strong> none</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, DCS Computing GmbH, JKU Linz and Sandia Corporation.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'v4.X',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: ''
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,187 @@
+LIGGGHTS (Version LIGGGHTS-PFM 23.02, compiled 2024-06-04-16:58:52 by damla, git commit 9f7281aad2754a308219fc5019c911c2a1f3cc96, based on LAMMPS 23 Nov 2013)
+### "yplane_finite_porous" PRIMITIVE SHAPE PARAMETERS
+# param[0] = position of the y-plane (The y coordinate, meaning the rectangle will be on the x, z dimensions)
+# param[1] = first coordinate of the left-bottom end of the rectangle (x, HOR)
+# param[2] = other coordinate of the left-bottom end of the rectangle (z, VER)
+# param[3] = np_ver (integer number of pores in the vertical (z) direction; must be >= 1)
+# param[4] = np_hor (integer number of pores in a horizontal (x); must be >= 1)
+# param[5] = A_ver (height of the rectangle)
+# param[6] = A_hor (length of the rectangle)
+# param[7] = fvoid_ver (fractional distance in vertical repeating cell which is void)
+# param[8] = fvoid_hor (fractional distance in horizontal repeating cell which is void)
+# param[9] = ftransition_ver (fractional distance in vertical repeating cell which is void + transition)
+# param[10] = ftransition_hor (fractional distance in horizontal repeating cell which is void + transition)
+# param[11] = shape (dummy double variable, put 0.0)
+
+### USE EXAMPLE
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous -1.0 -1.0 -1.0 6 4 6.0 8.0 0.25 0.125 0.2501 0.12505 0.0
+#create_atoms 1 single 1.12500 -0.39990 0.12500 # x, y, z coordinates of particle of type 1
+#set type 1 diameter 0.2 density 2650 vx 0.0 vy -0.6001 vz 0.0
+
+units si #
+dimension 3 #
+newton off #
+boundary f f f #
+atom_style sphere #
+pair_style gran model hertz tangential history #
+communicate single vel yes #
+region simulationdomain block -0.005905 0.167905 -0.000656 0.011154 -0.005905 0.167905 #
+create_box 3 simulationdomain #
+Created orthogonal box = (-0.005905 -0.000656 -0.005905) to (0.167905 0.011154 0.167905)
+  1 by 1 by 1 MPI processor grid
+
+fix top all wall/gran model hertz tangential history primitive type 2 yplane 0.005256#
+fix left all wall/gran model hertz tangential history primitive type 2 xplane 0.0#
+fix right all wall/gran model hertz tangential history primitive type 2 xplane 0.162001#
+fix front all wall/gran model hertz tangential history primitive type 2 zplane 0.0#
+fix back all wall/gran model hertz tangential history primitive type 2 zplane 0.162001#
+
+#fix filtermesh all mesh/surface file cal_mesh.stl type 2 scale 1 #
+#fix meshwall all wall/gran model hertz tangential history mesh n_meshes 1 meshes filtermesh #
+
+#Case 1
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.14074074074074	0.14074074074074	0.21851851851852	0.21851851851852 0.0 #
+#Case 2
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.16407407407407	0.16407407407407	0.17185185185185	0.17185185185185 0.0 #
+#Case 3
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.16640740740741	0.16640740740741	0.16718518518519	0.16718518518519 0.0 #
+#Case 4
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.16664074074074	0.16664074074074	0.16671851851852	0.16671851851852 0.0 #
+#Case 5
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.16666407407407	0.16666407407407	0.16667185185185	0.16667185185185 0.0 #
+
+#Case 6
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.16148148148148 0.16148148148148	0.17703703703704	0.17703703703704 0.0 #
+#Case 7
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.16614814814815 0.16614814814815 0.16770370370370	0.16770370370370 0.0 #
+
+#Case 8
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.16320987654321 0.16320987654321	0.17358024691358	0.17358024691358 0.0 #
+#Case 9
+#fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.16562962962963 0.16562962962963	0.16874074074074	0.16874074074074 0.0 #
+
+#Case 10
+fix filtermesh all wall/gran model hertz tangential history primitive type 2 yplane_finite_porous 0.0 0.0 0.0 30.0 30.0 0.162 0.162 0.15629629629630 0.15629629629630	0.18740740740741	0.18740740740741 0.0 #
+
+fix Young_mod all property/global youngsModulus peratomtype 375000000 46000000 1000000000 #
+fix Poisson_rat all property/global poissonsRatio peratomtype 0.32 0.42 0.29 #
+fix Coeff_rest all property/global coefficientRestitution peratomtypepair 3 0.15 0.32 0.475 0.32 0.49 0.645 0.475 0.645 0.8 #
+fix Coeff_fric all property/global coefficientFriction peratomtypepair 3 0.04 0.145 0.12 0.145 0.25 0.225 0.12 0.225 0.2 #
+
+neighbor 0.00026244 bin #
+neigh_modify delay 0 one 100000 page 5000000 #
+fix r_0to10p all particletemplate/sphere 12345787 atom_type 1 density constant 2650 radius constant 4.2e-05 #
+fix r_10to50p all particletemplate/sphere 15485863 atom_type 1 density constant 2650 radius constant 0.000116 #
+fix r_50to90p all particletemplate/sphere 15485867 atom_type 1 density constant 2650 radius constant 0.000423 #
+fix r_90to100p all particletemplate/sphere 32452843 atom_type 1 density constant 2650 radius constant 0.000656 #
+fix prob_par all particledistribution/discrete 32452867 4 r_0to10p 0.1 r_10to50p 0.4 r_50to90p 0.4 r_90to100p 0.1 #
+pair_coeff * * #
+timestep 1e-08 #
+
+fix nve_group all nve/sphere #
+#fix grav all gravity 9.81 vector 0 -1 0
+
+variable step equal step #
+variable mycount equal count(all) #
+fix print_amount_of_atoms all print 1 "${step} ${mycount}" file numatoms.txt screen no #
+run 0 #
+Memory usage per processor = 213.924 Mbytes
+Step Temp E_pair E_mol TotEng Press 
+       0            0            0            0            0            0 
+Loop time of 8.05e-07 on 1 procs for 0 steps with 0 atoms
+Max time of 8.05e-07 on 1 procs for 0 steps with 0 atoms
+
+Pair  time (%) = 0 (0)
+Max Pair time (ib) = 0 (0)
+Neigh time (%) = 0 (0)
+Max Neigh time (ib) = 0 (0)
+Comm  time (%) = 0 (0)
+Max Comm time (ib) = 0 (0)
+Outpt time (%) = 0 (0)
+Max Outpt time (ib) = 0 (0)
+Other time (%) = 8.05e-07 (100)
+Max Other time (ib) = 8.05e-07 (0)
+
+Nlocal:    0 ave 0 max 0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    0 ave 0 max 0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    0 ave 0 max 0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Neighbor list builds = 0
+Dangerous builds = 0
+run 1 #
+Memory usage per processor = 213.924 Mbytes
+Step Temp E_pair E_mol TotEng Press 
+       0            0            0            0            0            0 
+       1            0            0            0            0            0 
+Loop time of 5.9756e-05 on 1 procs for 1 steps with 0 atoms
+Max time of 5.9756e-05 on 1 procs for 1 steps with 0 atoms
+
+Pair  time (%) = 3.14e-07 (0.52547)
+Max Pair time (ib) = 3.14e-07 (0)
+Neigh time (%) = 0 (0)
+Max Neigh time (ib) = 0 (0)
+Comm  time (%) = 2.56e-07 (0.428409)
+Max Comm time (ib) = 2.56e-07 (0)
+Outpt time (%) = 1.0752e-05 (17.9932)
+Max Outpt time (ib) = 1.0752e-05 (0)
+Other time (%) = 4.8434e-05 (81.0529)
+Max Other time (ib) = 4.8434e-05 (0)
+
+Nlocal:    0 ave 0 max 0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    0 ave 0 max 0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    0 ave 0 max 0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Neighbor list builds = 0
+Dangerous builds = 0
+read_dump dump.atom_info_1 1 x y z radius vx vy vz box no add yes replace no #
+  orthogonal box = (-0.005905 -0.000656 -0.005905) to (0.167905 0.011154 0.167905)
+  0 atoms before read
+  2500 atoms in snapshot
+  0 atoms purged
+  0 atoms replaced
+  0 atoms trimmed
+  2500 atoms added
+  2500 atoms after read
+set atom * type 1 density 2650 vy -7.0 #
+  2500 settings made for type
+  2500 settings made for density
+  2500 settings made for vy
+dump dump_1 all custom 5000 dump.atom_info_ac_* id type x y z radius vx vy vz density #
+run 120000
+Memory usage per processor = 218.277 Mbytes
+Step Temp E_pair E_mol TotEng Press 
+       1 7.5257211e+17            0            0  0.038948376    453.71968 
+  120001 1.5669704e+17            0            0 0.0081096486    15.153444 
+Loop time of 8.13389 on 1 procs for 120000 steps with 2442 atoms
+Max time of 8.13389 on 1 procs for 120000 steps with 2442 atoms
+
+Pair  time (%) = 1.60883 (19.7793)
+Max Pair time (ib) = 1.60883 (0)
+Neigh time (%) = 0.777758 (9.56194)
+Max Neigh time (ib) = 0.777758 (0)
+Comm  time (%) = 0.0139724 (0.17178)
+Max Comm time (ib) = 0.0139724 (0)
+Outpt time (%) = 0.109414 (1.34516)
+Max Outpt time (ib) = 0.109414 (0)
+Other time (%) = 5.62392 (69.1418)
+Max Other time (ib) = 5.62392 (0)
+
+Nlocal:    2442 ave 2442 max 2442 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    0 ave 0 max 0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    86 ave 86 max 86 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 86
+Ave neighs/atom = 0.035217
+Neighbor list builds = 792
+Dangerous builds = 1

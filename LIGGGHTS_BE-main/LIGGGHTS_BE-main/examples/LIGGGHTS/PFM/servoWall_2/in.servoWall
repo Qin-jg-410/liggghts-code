@@ -1,0 +1,159 @@
+#########################################################################################
+# title: in.servoWall                                                                   #
+# additional files: folder mesh,                                                        #
+#                   postprocessing-script plotForce.m (Matlab)                          #
+# date: Feb. 2013                                                                       #
+# authors: Aigner, A.                                                                   #
+# e-mail: andreas.aigner@jku.at                                                         #
+# short description: test file for servo-wall; force and torque controller              #
+#                                                                                       #
+##########################################################################################
+
+
+#########################################################################################
+#                               user defined settings: settings                         #
+#########################################################################################
+variable    rad     equal       2e-3            # particle radius
+variable    dens    equal       2500            # particle density
+variable    dt      equal       5.0e-5          # time step width
+
+variable    ctrlForce   equal   -50
+variable    ctrlTorque  equal   -0.2
+
+# controller parameter
+variable    ctrlKp      equal     1e-2
+variable    ctrlKi      equal     0.0
+variable    ctrlKd      equal     0.0
+
+variable    ctrlKpTorque    equal   1e-3
+variable    ctrlKiTorque    equal   0.0 # 1.0e-5
+variable    ctrlKdTorque    equal   0.0
+
+#########################################################################################
+#                               internal settings - do not touch                        #
+#########################################################################################
+
+variable    skin            equal   0.5*${rad}
+variable    velMax          equal   0.499*${skin}/${dt}
+
+variable    cylRadius       equal   0.025
+variable    pz              equal   4.0*${cylRadius}     #pos. z-value of simulation domain
+
+# timesteps
+variable    nStepsInit      equal   5.0e-2/${dt}
+variable    nStepsSettle    equal   ceil(${pz}/(${velMax}*${ctrlKp})/${dt})
+variable    nStepsRun       equal   2.0/${dt}
+variable    dumpfreq        equal   5.0e-2/${dt}
+variable    dumpfreqForce   equal   1.0e-3/${dt}
+#########################################################################################
+
+atom_style	granular
+atom_modify	map array
+boundary	f f f
+newton		off
+
+communicate	single vel yes
+
+units		si
+
+# definition of the simulation region
+region		reg block -${cylRadius} ${cylRadius} -${cylRadius} ${cylRadius} 0.0 ${pz} units box
+create_box	1 reg
+
+neighbor	    ${skin} bin
+neigh_modify	delay 0
+
+#Material properties required for granular pair styles
+fix     m1 all property/global youngsModulus peratomtype 5.e6
+fix     m2 all property/global poissonsRatio peratomtype 0.45
+fix     m3 all property/global coefficientRestitution peratomtypepair 1 0.9
+fix     m4 all property/global coefficientFriction peratomtypepair 1 0.3
+fix     m5 all property/global coefficientRollingFriction peratomtypepair 1 0.1
+
+
+# pair style
+pair_style gran model hertz tangential history rolling_friction cdt #Hertzian without cohesion
+pair_coeff	* *
+
+#Timestep
+timestep	${dt}
+
+#Gravity
+fix		gravi all gravity 9.81 vector 0.0 0.0 -1.0
+
+#import triangular mesh from cad
+fix   cad1 all mesh/surface/stress/servo file meshes/plate.stl type 1 scale ${cylRadius} move 0. 0. ${pz} com 0. 0. ${pz} ctrlPV force axis 0. 0. 1. target_val ${ctrlForce} vel_max ${velMax} kp ${ctrlKp} ki ${ctrlKi} kd ${ctrlKd}
+fix   cad2 all mesh/surface/stress/servo file meshes/rotor.stl type 1 scale ${cylRadius} com 0. 0. 0. target_val ${ctrlTorque} vel_max ${velMax} axis 0. 0. 1. kp ${ctrlKpTorque} ki ${ctrlKiTorque} kd ${ctrlKdTorque} ctrlPV torque
+
+#use the imported mesh as granular wall
+fix granWall all wall/gran model hertz tangential history mesh n_meshes 2 meshes cad1 cad2
+
+#additional walls for particle insertation
+fix wCylinder all wall/gran model hertz tangential history primitive type 1 zcylinder ${cylRadius} 0. 0.
+
+# define the material in use
+fix		pts all particletemplate/sphere 5330 atom_type 1 density constant ${dens} radius constant ${rad}
+fix		pdd all particledistribution/discrete 5331 1 pts 1.0
+
+#region for insertion
+region  bc cylinder z 0.0 0.0 ${cylRadius} 0.0 ${pz} units box
+
+#particle insertation
+fix     ins all insert/pack seed 5332 distributiontemplate pdd maxattempt 100 insert_every once overlapcheck yes all_in yes vel constant 0.0 0.0 -0.2 region bc particles_in_region 1000 ntry_mc 10000
+
+#apply nve integration to all particles that are inserted as single particles
+fix		integr all nve/sphere
+
+#output settings, include total thermal energy
+compute		    rke all erotate/sphere
+thermo_style	custom step atoms ke c_rke vol
+thermo		    ${dumpfreq}
+thermo_modify	lost ignore norm no
+compute_modify  thermo_temp dynamic yes
+
+# --- runs ---
+# no movement of the plate at simulations start
+fix_modify cad1 integrate stop
+
+#insert the first particles so that dump is not empty
+run		1
+dump    dmp all custom ${dumpfreq} post/dump*.servoWall id type x y z vx vy vz fx fy fz omegax omegay omegaz radius
+
+dump    dumpstl1 all mesh/stl ${dumpfreq} post/dump_*.cad1.stl cad1
+dump    dumpstl2 all mesh/stl ${dumpfreq} post/dump_*.cad2.stl cad2
+
+# write stl-forces
+variable ForceX     equal f_cad1[1]
+variable ForceY     equal f_cad1[2]
+variable ForceZ     equal f_cad1[3]
+variable TorqueX    equal f_cad1[4]
+variable TorqueY    equal f_cad1[5]
+variable TorqueZ    equal f_cad1[6]
+variable PosX       equal f_cad1[7]
+variable PosY       equal f_cad1[8]
+variable PosZ       equal f_cad1[9]
+fix DumpText all print ${dumpfreqForce} "${ForceX} ${ForceY} ${ForceZ} ${TorqueX} ${TorqueY} ${TorqueZ} ${PosX} ${PosY} ${PosZ}" screen no title "Fx Fy Fz Tx Ty Tz X Y Z" file post/force.cad1.txt
+
+variable ForceXCad2     equal f_cad2[1]
+variable ForceYCad2     equal f_cad2[2]
+variable ForceZCad2     equal f_cad2[3]
+variable TorqueXCad2    equal f_cad2[4]
+variable TorqueYCad2    equal f_cad2[5]
+variable TorqueZCad2    equal f_cad2[6]
+fix DumpTextCad2 all print ${dumpfreqForce} "${ForceXCad2} ${ForceYCad2} ${ForceZCad2} ${TorqueXCad2} ${TorqueYCad2} ${TorqueZCad2}" screen no title "Fx Fy Fz Tx Ty Tz" file post/force.cad2.txt
+
+#insert particles
+run     ${nStepsInit}
+
+# move
+fix_modify cad1 integrate start
+
+#settle particles
+run     ${nStepsSettle}
+
+#run
+run     ${nStepsRun}
+
+fix_modify cad1 target_val -10
+run     ${nStepsRun}
+

@@ -1,0 +1,17 @@
+doxygen
+post
+.DS_Store
+warnings.liggghts
+log.liggghts
+*.swp
+*.csv
+*.png
+*.pdf
+*.plt
+*.data
+*.dat
+*.backup
+*.dump
+*.stl
+*.vtk
+src/log.liggghts

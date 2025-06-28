@@ -1,0 +1,89 @@
+echo both
+
+atom_style granular
+atom_modify map array
+boundary f f f
+newton off
+
+communicate single vel yes
+
+units si
+processors 1 1 1
+
+################### variables ##################
+variable npart equal 150
+variable seed equal 253179
+################################################
+
+variable rad equal 0.5
+variable dens equal 200
+variable xmax equal 5.0
+variable ymax equal 5.0
+variable zmax equal 12.0
+
+variable xmin_r equal -${xmax}-0.1
+variable xmax_r equal ${xmax}+0.1
+variable ymin_r equal -${ymax}-0.1
+variable ymax_r equal ${ymax}+0.1
+variable zmin_r equal -2.0*${rad}-0.1
+variable zmax_r equal ${zmax}+0.1
+region reg block ${xmin_r} ${xmax_r} ${ymin_r} ${ymax_r} ${zmin_r} ${zmax_r} units box
+create_box 1 reg
+
+neighbor 0.02 bin
+neigh_modify delay 0
+
+shell mkdir post
+
+#Material properties 
+fix 		m1 all property/global youngsModulus peratomtype 1.e7
+fix 		m2 all property/global poissonsRatio peratomtype 0.45
+fix 		m3 all property/global coefficientRestitution peratomtypepair 1 0.9
+fix 		m4 all property/global coefficientFriction peratomtypepair 1 0.5
+
+pair_style gran model hertz tangential no_history
+pair_coeff * *
+
+variable dt equal 5e-4
+
+timestep ${dt}
+variable doutput equal 0.1/${dt}
+variable runtime equal 20/${dt}
+variable stoptime equal 5/${dt}
+
+#insert geometry & define walls
+
+fix         container  all mesh/surface/stress file meshes/container.stl type 1 curvature_tolerant yes
+
+fix         walls all wall/gran model hertz tangential no_history mesh n_meshes 1 meshes container
+
+fix         ts all check/timestep/gran ${doutput} 0.1 0.1
+
+# region for particle insertion
+variable zmin_fill equal ${zmax}-10.0*${rad}
+region      insReg block -${xmax} ${xmax} -${ymax} ${ymax} ${zmin_fill} ${zmax} units box
+
+# particle definition and insertion
+fix         pts1 all particletemplate/sphere 17903 atom_type 1 density constant ${dens} radius constant ${rad}
+fix         pdd1 all particledistribution/discrete 19073 1 pts1 1.0
+fix         ins all insert/rate/region seed ${seed} distributiontemplate pdd1 nparticles ${npart} particlerate ${npart} insert_every 1000 overlapcheck yes all_in yes vel gaussian 0.0 0.0 -10.0 5. 5. 5. region insReg
+
+# integration
+fix         integr all nve/sphere
+
+#thermo command
+thermo_style    custom step atoms ke f_ts[1] f_ts[2]
+thermo          ${doutput}
+thermo_modify   lost ignore norm no
+compute_modify  thermo_temp dynamic yes
+
+region force_reg block -5 5 -5 5 -1 5
+fix force all addforce 0. 0. 50. region force_reg
+
+dump            dmp all custom/vtm ${doutput} post/random_choser_*.vtm particle_properties radius id meshes all
+
+run ${runtime}
+
+fix         gravi all gravity 9.81 vector 0.0 0.0 -1.0
+
+run ${stoptime}

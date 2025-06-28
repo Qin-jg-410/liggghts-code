@@ -1,0 +1,15 @@
+安装 C++ 编译器和构建工具链：
+您需要 g++ (GNU C++ 编译器) 和 make。通常，它们可以通过以下方式安装
+
+sudo apt update
+sudo apt install build-essential # 这会安装 g++, make, libc-dev 等
+
+安装 CMake：
+CMake 是一个跨平台的构建系统生成工具。
+
+sudo apt install cmake
+
+安装 Zlib 开发库：
+项目中包含了 Gunzip.cpp 和 Gunzip.h，这通常意味着它可能依赖于 zlib 库来处理压缩文件。
+
+sudo apt install zlib1g-dev

@@ -1,0 +1,212 @@
+LIGGGHTS (Version LIGGGHTS-PFM 23.02, compiled 2024-05-17-13:23:56 by serperd1, git commit unknown, based on LAMMPS 23 Nov 2013)
+units si #
+dimension 3 #
+newton off #
+boundary f f f #
+atom_style sphere #
+pair_style gran model hertz tangential history #
+communicate single vel yes #
+region outer_basket cylinder y 0 0 0.15 -0.15 0.06 #
+create_box 3 outer_basket #
+Created orthogonal box = (-0.15 -0.15 -0.15) to (0.15 0.06 0.15)
+  4 by 2 by 5 MPI processor grid
+variable my_omega equal 157.0796 #
+fix in_cap_mesh all mesh/surface file in_cap.stl type 3 scale 1 #
+fix cone_mesh all mesh/surface file cone.stl type 3 scale 1 #
+fix rotating_wall_1 all move/mesh mesh cone_mesh rotate/variable origin 0 0 0 axis 0 1 0 omega v_my_omega #
+fix filter_mesh_walls all wall/gran model hertz tangential history primitive type 2 ycylinder_finite_porous 0.069 0 0 3 18 -0.0628 0 0.041600637 0.036156128 0.057800637 0.052356128 shear x 10.8385
+
+fix inlet_cyl_wall_mesh all mesh/surface file in_cyl.stl type 3 scale 1 #
+fix top_cyl_wall_mesh all mesh/surface file top_cyl.stl type 3 scale 1 #
+fix rotating_wall_4 all move/mesh mesh top_cyl_wall_mesh rotate/variable origin 0 0 0 axis 0 1 0 omega v_my_omega #
+fix bot_cyl_wall_mesh all mesh/surface file bot_cyl.stl type 3 scale 1 #
+fix rotating_wall_5 all move/mesh mesh bot_cyl_wall_mesh rotate/variable origin 0 0 0 axis 0 1 0 omega v_my_omega #
+fix bot_disk_wall_mesh all mesh/surface file bottom_disk.stl type 3 scale 1 #
+fix rotating_wall_6 all move/mesh mesh bot_disk_wall_mesh rotate/variable origin 0 0 0 axis 0 1 0 omega v_my_omega #
+fix top_disk_wall_mesh all mesh/surface file top_disk.stl type 3 scale 1 #
+fix rotating_wall_7 all move/mesh mesh top_disk_wall_mesh rotate/variable origin 0 0 0 axis 0 1 0 omega v_my_omega #
+fix GMSH_mesh_walls all wall/gran model hertz tangential history mesh n_meshes 7 meshes in_cap_mesh cone_mesh top_cyl_wall_mesh bot_cyl_wall_mesh bot_disk_wall_mesh inlet_cyl_wall_mesh top_disk_wall_mesh #
+fix Young_mod all property/global youngsModulus peratomtype 375000000 46000000 1000000000 #
+fix Poisson_rat all property/global poissonsRatio peratomtype 0.32 0.42 0.29 #
+fix Coeff_rest all property/global coefficientRestitution peratomtypepair 3 0.15 0.32 0.475 0.32 0.49 0.645 0.475 0.645 0.8 #
+fix Coeff_fric all property/global coefficientFriction peratomtypepair 3 0.04 0.145 0.12 0.145 0.25 0.225 0.12 0.225 0.2 #
+
+neighbor 0.00026244 bin #
+neigh_modify delay 0 one 100000 page 5000000 #
+fix r_0to10p all particletemplate/sphere 12345787 atom_type 1 density constant 2650 radius constant 4.2e-05 #
+fix r_10to50p all particletemplate/sphere 15485863 atom_type 1 density constant 2650 radius constant 0.000116 #
+fix r_50to90p all particletemplate/sphere 15485867 atom_type 1 density constant 2650 radius constant 0.000423 #
+fix r_90to100p all particletemplate/sphere 32452843 atom_type 1 density constant 2650 radius constant 0.000656 #
+fix prob_par all particledistribution/discrete 32452867 4 r_0to10p 0.1 r_10to50p 0.4 r_50to90p 0.4 r_90to100p 0.1 #
+pair_coeff * * #
+timestep 3.2394e-08 #
+
+fix nve_group all nve/sphere #
+fix grav_fix all gravity 6.1081 vector 0.017 -0.0033 0 -1 0 #
+fix cent_fix all centrifugal 157.0796 0.017 -0.0033 0.069 #
+
+variable step equal step #
+variable mycount equal count(all) #
+fix print_amount_of_atoms all print 1 "${step} ${mycount}" file numatoms.txt screen no #
+run 0 #
+Memory usage per processor = 1048.81 Mbytes
+Step Temp E_pair E_mol TotEng Press 
+       0            0            0            0            0            0 
+Loop time of 6.40316e-05 on 40 procs for 0 steps with 0 atoms
+Max time of 0.000160764 on 40 procs for 0 steps with 0 atoms
+
+Pair  time (%) = 0 (0)
+Max Pair time (ib) = 0 (0)
+Neigh time (%) = 0 (0)
+Max Neigh time (ib) = 0 (0)
+Comm  time (%) = 0 (0)
+Max Comm time (ib) = 0 (0)
+Outpt time (%) = 0 (0)
+Max Outpt time (ib) = 0 (0)
+Other time (%) = 6.40316e-05 (100)
+Max Other time (ib) = 0.000160764 (151.07)
+
+Nlocal:    0 ave 0 max 0 min
+Histogram: 40 0 0 0 0 0 0 0 0 0
+Nghost:    0 ave 0 max 0 min
+Histogram: 40 0 0 0 0 0 0 0 0 0
+Neighs:    0 ave 0 max 0 min
+Histogram: 40 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Neighbor list builds = 0
+Dangerous builds = 0
+run 1 #
+Memory usage per processor = 1048.81 Mbytes
+Step Temp E_pair E_mol TotEng Press 
+       0            0            0            0            0            0 
+       1            0            0            0            0            0 
+Loop time of 0.0124689 on 40 procs for 1 steps with 0 atoms
+Max time of 0.0124709 on 40 procs for 1 steps with 0 atoms
+
+Pair  time (%) = 1.0383e-06 (0.00832713)
+Max Pair time (ib) = 1.688e-06 (62.5734)
+Neigh time (%) = 0 (0)
+Max Neigh time (ib) = 0 (0)
+Comm  time (%) = 0.000254167 (2.03841)
+Max Comm time (ib) = 0.000342858 (34.8949)
+Outpt time (%) = 0.00125174 (10.0389)
+Max Outpt time (ib) = 0.00128406 (2.58234)
+Other time (%) = 0.0109619 (87.9144)
+Max Other time (ib) = 0.0122331 (11.596)
+
+Nlocal:    0 ave 0 max 0 min
+Histogram: 40 0 0 0 0 0 0 0 0 0
+Nghost:    0 ave 0 max 0 min
+Histogram: 40 0 0 0 0 0 0 0 0 0
+Neighs:    0 ave 0 max 0 min
+Histogram: 40 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Neighbor list builds = 0
+Dangerous builds = 0
+read_dump dump.atom_info_1 1 x y z radius vx vy vz box no add yes replace no #
+  orthogonal box = (-0.15 -0.15 -0.15) to (0.15 0.06 0.15)
+  0 atoms before read
+  4382 atoms in snapshot
+  0 atoms purged
+  0 atoms replaced
+  0 atoms trimmed
+  4382 atoms added
+  4382 atoms after read
+set atom * type 1 density 2650 vy -0.011753 #
+  4382 settings made for type
+  4382 settings made for density
+  4382 settings made for vy
+run 1 #
+Memory usage per processor = 1053.43 Mbytes
+Step Temp E_pair E_mol TotEng Press 
+       1 2.250216e+12            0            0 2.0416084e-07 7.2014407e-06 
+       2 2.7862136e+13            0            0 2.527916e-06 8.9168113e-05 
+Loop time of 0.0107804 on 40 procs for 1 steps with 4382 atoms
+Max time of 0.010786 on 40 procs for 1 steps with 4382 atoms
+
+Pair  time (%) = 2.79545e-06 (0.0259309)
+Max Pair time (ib) = 4.6098e-05 (1549.04)
+Neigh time (%) = 0 (0)
+Max Neigh time (ib) = 0 (0)
+Comm  time (%) = 4.08992e-06 (0.0379385)
+Max Comm time (ib) = 5.6918e-05 (1291.66)
+Outpt time (%) = 5.81287e-05 (0.539207)
+Max Outpt time (ib) = 6.3216e-05 (8.75183)
+Other time (%) = 0.0107154 (99.3969)
+Max Other time (ib) = 0.0107356 (0.188981)
+
+Nlocal:    109.55 ave 2194 max 0 min
+Histogram: 38 0 0 0 0 0 0 0 0 2
+Nghost:    10 ave 210 max 0 min
+Histogram: 38 0 0 0 0 0 0 0 0 2
+Neighs:    34.35 ave 701 max 0 min
+Histogram: 38 0 0 0 0 0 0 0 0 2
+
+Total # of neighbors = 1374
+Ave neighs/atom = 0.313555
+Neighbor list builds = 0
+Dangerous builds = 0
+write_dump all custom dump.atom_info_ac_* id type x y z radius vx vy vz density
+run 32392
+Memory usage per processor = 1053.43 Mbytes
+Step Temp E_pair E_mol TotEng Press 
+       2 2.7862136e+13            0            0 2.527916e-06 8.9168113e-05 
+   32394 3.9698799e+15            0            0 0.00036018498  0.014765261 
+Loop time of 363.953 on 40 procs for 32392 steps with 4382 atoms
+Max time of 363.953 on 40 procs for 32392 steps with 4382 atoms
+
+Pair  time (%) = 0.0892751 (0.0245293)
+Max Pair time (ib) = 1.54427 (1629.79)
+Neigh time (%) = 0.578546 (0.158962)
+Max Neigh time (ib) = 1.06722 (84.4668)
+Comm  time (%) = 0.135715 (0.0372891)
+Max Comm time (ib) = 1.23588 (810.645)
+Outpt time (%) = 5.25439e-05 (1.4437e-05)
+Max Outpt time (ib) = 5.4661e-05 (4.0292)
+Other time (%) = 363.149 (99.7792)
+Max Other time (ib) = 363.349 (0.055172)
+
+Nlocal:    109.55 ave 2192 max 0 min
+Histogram: 38 0 0 0 0 0 0 0 0 2
+Nghost:    10.075 ave 211 max 0 min
+Histogram: 38 0 0 0 0 0 0 0 0 2
+Neighs:    35.775 ave 728 max 0 min
+Histogram: 38 0 0 0 0 0 0 0 0 2
+
+Total # of neighbors = 1431
+Ave neighs/atom = 0.326563
+Neighbor list builds = 316
+Dangerous builds = 0
+dump myDump all custom 32394 dump.atom_info_ac_* id type x y z radius vx vy vz density
+run 12277326
+Memory usage per processor = 1053.74 Mbytes
+Step Temp E_pair E_mol TotEng Press 
+   32394 3.9698799e+15            0            0 0.00036018498  0.014756749 
+12309720 1.9451354e+16            0            0 0.0017648105  0.062182331 
+Loop time of 139009 on 40 procs for 12277326 steps with 4257 atoms
+Max time of 139009 on 40 procs for 12277326 steps with 4257 atoms
+
+Pair  time (%) = 31.6683 (0.0227814)
+Max Pair time (ib) = 472.829 (1393.07)
+Neigh time (%) = 105.842 (0.0761402)
+Max Neigh time (ib) = 182.379 (72.3121)
+Comm  time (%) = 90.3505 (0.064996)
+Max Comm time (ib) = 415.624 (360.012)
+Outpt time (%) = 7.34499 (0.00528381)
+Max Outpt time (ib) = 11.4959 (56.5135)
+Other time (%) = 138774 (99.8308)
+Max Other time (ib) = 138880 (0.0765227)
+
+Nlocal:    106.425 ave 1734 max 0 min
+Histogram: 37 1 0 0 0 0 0 0 0 2
+Nghost:    6.525 ave 127 max 0 min
+Histogram: 38 0 0 0 0 0 0 0 1 1
+Neighs:    27.525 ave 512 max 0 min
+Histogram: 38 0 0 0 0 0 0 0 0 2
+
+Total # of neighbors = 1101
+Ave neighs/atom = 0.258633
+Neighbor list builds = 58428
+Dangerous builds = 127

@@ -1,0 +1,653 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>fix box/relax command &mdash; LIGGGHTS v4.X documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="Manual.html" class="icon icon-home"> LIGGGHTS
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v4.X
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="Section_intro.html">1. Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Section_intro.html#what-is-liggghts-r-inl">1.1. What is LIGGGHTS(R)-INL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_intro.html#liggghts-public-vs-liggghts-premium">1.2. LIGGGHTS-PUBLIC VS. LIGGGHTS-PREMIUM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_intro.html#history">1.3. History</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_intro.html#liggghts-r-inl-features">1.4. LIGGGHTS(R)-INL features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_intro.html#liggghts-r-inl-general-features">1.5. LIGGGHTS(R)-INL General features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_intro.html#liggghts-r-inl-model-features-liggghts-public-features">1.6. LIGGGHTS(R)-INL Model features: LIGGGHTS-PUBLIC features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_intro.html#liggghts-r-inl-model-features-additional-features-for-liggghts-r-inl">1.7. LIGGGHTS(R)-INL Model features: Additional features for LIGGGHTS(R)-INL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_intro.html#open-source-distribution">1.8. Open source distribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_intro.html#acknowledgments-and-citations">1.9. Acknowledgments and citations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Section_start.html">2. Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Section_start.html#how-to-obtain-liggghts-r-inl">2.1. How to obtain LIGGGHTS(R)-INL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_start.html#making-liggghts-r-inl">2.2. Making LIGGGHTS(R)-INL</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Section_start.html#read-this-first">2.2.1. <strong>Read this first:</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_start.html#steps-to-build-a-liggghts-r-inl-executable">2.2.2. <strong>Steps to build a LIGGGHTS(R)-INL executable:</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_start.html#advanced-building-using-custom-makefiles">2.2.3. <strong>Advanced building using custom makefiles</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_start.html#errors-that-can-occur-when-making-liggghts-r-inl">2.2.4. <strong>Errors that can occur when making LIGGGHTS(R)-INL:</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_start.html#additional-build-tips">2.2.5. <strong>Additional build tips:</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_start.html#building-for-a-mac">2.2.6. <strong>Building for a Mac:</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_start.html#building-for-windows">2.2.7. <strong>Building for Windows:</strong></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Section_start.html#making-liggghts-r-inl-with-optional-packages">2.3. Making LIGGGHTS(R)-INL with optional packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_start.html#building-liggghts-r-inl-via-the-make-py-script">2.4. Building LIGGGHTS(R)-INL via the Make.py script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_start.html#building-liggghts-r-inl-as-a-library">2.5. Building LIGGGHTS(R)-INL as a library</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Section_start.html#static-library">2.5.1. <strong>Static library:</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_start.html#shared-library">2.5.2. <strong>Shared library:</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_start.html#additional-requirement-for-using-a-shared-library">2.5.3. <strong>Additional requirement for using a shared library:</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_start.html#calling-the-liggghts-r-inl-library">2.5.4. <strong>Calling the LIGGGHTS(R)-INL library:</strong></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Section_start.html#running-liggghts-r-inl">2.6. Running LIGGGHTS(R)-INL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_start.html#command-line-options">2.7. Command-line options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_start.html#liggghts-r-inl-screen-output">2.8. LIGGGHTS(R)-INL screen output</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Section_input_script.html">3. Input Script</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Section_input_script.html#liggghts-r-inl-input-script">3.1. LIGGGHTS(R)-INL input script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_input_script.html#parsing-rules">3.2. Parsing rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_input_script.html#input-script-structure">3.3. Input script structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_input_script.html#an-example-input-script">3.4. An example input script</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Section_commands.html">4. Commands</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Section_commands.html#list-of-all-commands">4.1. List of all commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_commands.html#bond-style-potentials">4.2. bond_style potentials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_commands.html#compute-styles">4.3. compute styles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_commands.html#dump-styles">4.4. dump styles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_commands.html#fix-styles">4.5. fix styles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_commands.html#pair-style-potentials">4.6. pair_style potentials</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Section_gran_models.html">5. Contact models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Section_gran_models.html#cohesion-commands">5.1. cohesion commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_gran_models.html#model-commands">5.2. model commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_gran_models.html#rolling-friction-commands">5.3. rolling_friction commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_gran_models.html#surface-commands">5.4. surface commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_gran_models.html#tangential-commands">5.5. tangential commands</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Section_mesh_modules.html">6. Mesh modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Section_mesh_modules.html#module-commands">6.1. module commands</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Section_packages.html">7. Packages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Section_howto.html">8. How-to discussions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Section_howto.html#restarting-a-simulation">8.1. Restarting a simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_howto.html#d-simulations">8.2. 2d simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_howto.html#running-multiple-simulations-from-one-input-script">8.3. Running multiple simulations from one input script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_howto.html#granular-models">8.4. Granular models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_howto.html#coupling-liggghts-r-inl-to-other-codes">8.5. Coupling LIGGGHTS(R)-INL to other codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_howto.html#visualizing-liggghts-r-inl-snapshots">8.6. Visualizing LIGGGHTS(R)-INL snapshots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_howto.html#triclinic-non-orthogonal-simulation-boxes">8.7. Triclinic (non-orthogonal) simulation boxes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_howto.html#output-from-liggghts-r-inl-thermo-dumps-computes-fixes-variables">8.8. Output from LIGGGHTS(R)-INL (thermo, dumps, computes, fixes, variables)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Section_howto.html#global-per-atom-local-data">8.8.1. Global/per-atom/local data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_howto.html#scalar-vector-array-data">8.8.2. Scalar/vector/array data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_howto.html#thermodynamic-output">8.8.3. Thermodynamic output</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_howto.html#dump-file-output">8.8.4. Dump file output</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_howto.html#fixes-that-write-output-files">8.8.5. Fixes that write output files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_howto.html#computes-that-process-output-quantities">8.8.6. Computes that process output quantities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_howto.html#fixes-that-process-output-quantities">8.8.7. Fixes that process output quantities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_howto.html#computes-that-generate-values-to-output">8.8.8. Computes that generate values to output</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_howto.html#fixes-that-generate-values-to-output">8.8.9. Fixes that generate values to output</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_howto.html#variables-that-generate-values-to-output">8.8.10. Variables that generate values to output</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_howto.html#summary-table-of-output-options-and-data-flow-between-commands">8.8.11. Summary table of output options and data flow between commands</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Section_howto.html#walls">8.9. Walls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_howto.html#library-interface-to-liggghts-r-inl">8.10. Library interface to LIGGGHTS(R)-INL</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Section_modify.html">9. Modifying &amp; extending LIGGGHTS(R)-INL</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Section_modify.html#atom-styles">9.1. Atom styles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_modify.html#compute-styles">9.2. Compute styles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_modify.html#dump-styles">9.3. Dump styles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_modify.html#dump-custom-output-options">9.4. Dump custom output options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_modify.html#fix-styles">9.5. Fix styles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_modify.html#input-script-commands">9.6. Input script commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_modify.html#pairwise-potentials">9.7. Pairwise potentials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_modify.html#region-styles">9.8. Region styles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_modify.html#thermodynamic-output-options">9.9. Thermodynamic output options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_modify.html#variable-options">9.10. Variable options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_modify.html#submitting-new-features-for-inclusion-in-liggghts-r-inl">9.11. Submitting new features for inclusion in LIGGGHTS(R)-INL</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Section_python.html">10. Python interface to LIGGGHTS(R)-INL</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Section_python.html#building-liggghts-r-inl-as-a-shared-library">10.1. Building LIGGGHTS(R)-INL as a shared library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_python.html#installing-the-python-wrapper-into-python">10.2. Installing the Python wrapper into Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_python.html#extending-python-with-mpi-to-run-in-parallel">10.3. Extending Python with MPI to run in parallel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_python.html#testing-the-python-liggghts-r-inl-interface">10.4. Testing the Python-LIGGGHTS(R)-INL interface</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Section_python.html#test-liggghts-r-inl-and-python-in-serial">10.4.1. <strong>Test LIGGGHTS(R)-INL and Python in serial:</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_python.html#test-liggghts-r-inl-and-python-in-parallel">10.4.2. <strong>Test LIGGGHTS(R)-INL and Python in parallel:</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="Section_python.html#running-python-scripts">10.4.3. <strong>Running Python scripts:</strong></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Section_python.html#using-liggghts-r-inl-from-python">10.5. Using LIGGGHTS(R)-INL from Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_python.html#example-python-scripts-that-use-liggghts-r-inl">10.6. Example Python scripts that use LIGGGHTS(R)-INL</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Section_errors.html">11. Errors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Section_errors.html#common-problems">11.1. Common problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_errors.html#reporting-bugs">11.2. Reporting bugs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_errors.html#error-warning-messages">11.3. Error &amp; warning messages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_errors.html#error">11.4. Errors:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Section_errors.html#warnings">11.5. Warnings:</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="Manual.html">LIGGGHTS</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="Manual.html">Docs</a> &raquo;</li>
+        
+      <li>fix box/relax command</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/fix_box_relax.txt" rel="nofollow"> View page source</a>
+          
+          <a href="http://www.cfdem.com"> Website</a>
+          
+            <a href="Section_commands.html#comm" rel="nofollow"> Commands</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+  
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="fix-box-relax-command">
+<span id="index-0"></span><h1>fix box/relax command<a class="headerlink" href="#fix-box-relax-command" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="syntax">
+<h2>Syntax<a class="headerlink" href="#syntax" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>fix ID group-ID box/relax keyword value ...
+</pre></div>
+</div>
+<ul class="simple">
+<li>ID, group-ID are documented in <a class="reference internal" href="fix.html"><em>fix</em></a> command</li>
+<li>box/relax = style name of this fix command</li>
+</ul>
+<pre class="literal-block">
+one or more keyword value pairs may be appended
+keyword = <em>iso</em> or <em>aniso</em> or <em>tri</em> or <em>x</em> or <em>y</em> or <em>z</em> or <em>xy</em> or <em>yz</em> or <em>xz</em> or <em>couple</em> or <em>nreset</em> or <em>vmax</em> or <em>dilate</em> or <em>scaleyz</em> or <em>scalexz</em> or <em>scalexy</em> or <em>fixedpoint</em>
+  <em>iso</em> or <em>aniso</em> or <em>tri</em> value = Ptarget = desired pressure (pressure units)
+  <em>x</em> or <em>y</em> or <em>z</em> or <em>xy</em> or <em>yz</em> or <em>xz</em> value = Ptarget = desired pressure (pressure units)
+  <em>couple</em> = <em>none</em> or <em>xyz</em> or <em>xy</em> or <em>yz</em> or <em>xz</em>
+  <em>nreset</em> value = reset reference cell every this many minimizer iterations
+  <em>vmax</em> value = fraction = max allowed volume change in one iteration
+  <em>dilate</em> value = <em>all</em> or <em>partial</em>
+  <em>scaleyz</em> value = <em>yes</em> or <em>no</em> = scale yz with lz
+  <em>scalexz</em> value = <em>yes</em> or <em>no</em> = scale xz with lz
+  <em>scalexy</em> value = <em>yes</em> or <em>no</em> = scale xy with ly
+  <em>fixedpoint</em> values = x y z
+    x,y,z = perform relaxation dilation/contraction around this point (distance units)
+</pre>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>fix 1 all box/relax iso 0.0 vmax 0.001
+fix 2 water box/relax aniso 0.0 dilate partial
+fix 2 ice box/relax tri 0.0 couple xy nreset 100
+</pre></div>
+</div>
+</div>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>Apply an external pressure or stress tensor to the simulation box
+during an <code class="xref doc docutils literal"><span class="pre">energy</span> <span class="pre">minimization</span></code>.  This allows the box
+size and shape to vary during the iterations of the minimizer so that
+the final configuration will be both an energy minimum for the
+potential energy of the atoms, and the system pressure tensor will be
+close to the specified external tensor.  Conceptually, specifying a
+positive pressure is like squeezing on the simulation box; a negative
+pressure typically allows the box to expand.</p>
+<hr class="docutils" />
+<p>The external pressure tensor is specified using one or more of the
+<em>iso</em>, <em>aniso</em>, <em>tri</em>, <em>x</em>, <em>y</em>, <em>z</em>, <em>xy</em>, <em>xz</em>, <em>yz</em>, and <em>couple</em>
+keywords.  These keywords give you the ability to specify all 6
+components of an external stress tensor, and to couple various of
+these components together so that the dimensions they represent are
+varied together during the mimimization.</p>
+<p>Orthogonal simulation boxes have 3 adjustable dimensions (x,y,z).
+Triclinic (non-orthogonal) simulation boxes have 6 adjustable
+dimensions (x,y,z,xy,xz,yz).  The <a class="reference internal" href="create_box.html"><em>create_box</em></a>, <a class="reference internal" href="read_data.html"><em>read data</em></a>, and <a class="reference internal" href="read_restart.html"><em>read_restart</em></a> commands
+specify whether the simulation box is orthogonal or non-orthogonal
+(triclinic) and explain the meaning of the xy,xz,yz tilt factors.</p>
+<p>The target pressures <em>Ptarget</em> for each of the 6 components of the
+stress tensor can be specified independently via the <em>x</em>, <em>y</em>, <em>z</em>,
+<em>xy</em>, <em>xz</em>, <em>yz</em> keywords, which correspond to the 6 simulation box
+dimensions.  For example, if the <em>y</em> keyword is used, the y-box length
+will change during the minimization.  If the <em>xy</em> keyword is used, the
+xy tilt factor will change.  A box dimension will not change if that
+component is not specified.</p>
+<p>Note that in order to use the <em>xy</em>, <em>xz</em>, or <em>yz</em> keywords, the
+simulation box must be triclinic, even if its initial tilt factors are
+0.0.</p>
+<p>When the size of the simulation box changes, all atoms are re-scaled
+to new positions, unless the keyword <em>dilate</em> is specified with a
+value of <em>partial</em>, in which case only the atoms in the fix group are
+re-scaled.  This can be useful for leaving the coordinates of atoms in
+a solid substrate unchanged and controlling the pressure of a
+surrounding fluid.</p>
+<p>The <em>scaleyz</em>, <em>scalexz</em>, and <em>scalexy</em> keywords control whether or
+not the corresponding tilt factors are scaled with the associated box
+dimensions when relaxing triclinic periodic cells.  The default
+values <em>yes</em> will turn on scaling, which corresponds to adjusting the
+linear dimensions of the cell while preserving its shape.  Choosing
+<em>no</em> ensures that the tilt factors are not scaled with the box
+dimensions. See below for restrictions and default values in different
+situations. In older versions of LIGGGHTS(R)-INL, scaling of tilt factors was
+not performed. The old behavior can be recovered by setting all three
+scale keywords to <em>no</em>.</p>
+<p>The <em>fixedpoint</em> keyword specifies the fixed point for cell relaxation.
+By default, it is the center of the box.  Whatever point is
+chosen will not move during the simulation.  For example, if the lower
+periodic boundaries pass through (0,0,0), and this point is provided
+to <em>fixedpoint</em>, then the lower periodic boundaries will remain at
+(0,0,0), while the upper periodic boundaries will move twice as
+far. In all cases, the particle positions at each iteration are
+unaffected by the chosen value, except that all particles are
+displaced by the same amount, different on each iteration.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Appling an external pressure to tilt dimensions <em>xy</em>,
+<em>xz</em>, <em>yz</em> can sometimes result in arbitrarily large values of the
+tilt factors, i.e. a dramatically deformed simulation box.  This
+typically indicates that there is something badly wrong with how the
+simulation was constructed.  The two most common sources of this error
+are applying a shear stress to a liquid system or specifying an
+external shear stress tensor that exceeds the yield stress of the
+solid.  In either case the minimization may converge to a bogus
+conformation or not converge at all.  Also note that if the box shape
+tilts to an extreme shape, LIGGGHTS(R)-INL will run less efficiently, due to
+the large volume of communication needed to acquire ghost atoms around
+a processor&#8217;s irregular-shaped sub-domain.  For extreme values of
+tilt, LIGGGHTS(R)-INL may also lose atoms and generate an error.</p>
+</div>
+<hr class="docutils" />
+<p>The <em>couple</em> keyword allows two or three of the diagonal components of
+the pressure tensor to be &#8220;coupled&#8221; together.  The value specified
+with the keyword determines which are coupled.  For example, <em>xz</em>
+means the <em>Pxx</em> and <em>Pzz</em> components of the stress tensor are coupled.
+<em>Xyz</em> means all 3 diagonal components are coupled.  Coupling means two
+things: the instantaneous stress will be computed as an average of the
+corresponding diagonal components, and the coupled box dimensions will
+be changed together in lockstep, meaning coupled dimensions will be
+dilated or contracted by the same percentage every timestep.  The
+<em>Ptarget</em> values for any coupled dimensions must be identical.
+<em>Couple xyz</em> can be used for a 2d simulation; the <em>z</em> dimension is
+simply ignored.</p>
+<hr class="docutils" />
+<p>The <em>iso</em>, <em>aniso</em>, and <em>tri</em> keywords are simply shortcuts that are
+equivalent to specifying several other keywords together.</p>
+<p>The keyword <em>iso</em> means couple all 3 diagonal components together when
+pressure is computed (hydrostatic pressure), and dilate/contract the
+dimensions together.  Using &#8220;iso Ptarget&#8221; is the same as specifying
+these 4 keywords:</p>
+<div class="highlight-python"><div class="highlight"><pre>x Ptarget
+y Ptarget
+z Ptarget
+couple xyz
+</pre></div>
+</div>
+<p>The keyword <em>aniso</em> means <em>x</em>, <em>y</em>, and <em>z</em> dimensions are controlled
+independently using the <em>Pxx</em>, <em>Pyy</em>, and <em>Pzz</em> components of the
+stress tensor as the driving forces, and the specified scalar external
+pressure.  Using &#8220;aniso Ptarget&#8221; is the same as specifying these 4
+keywords:</p>
+<div class="highlight-python"><div class="highlight"><pre>x Ptarget
+y Ptarget
+z Ptarget
+couple none
+</pre></div>
+</div>
+<p>The keyword <em>tri</em> means <em>x</em>, <em>y</em>, <em>z</em>, <em>xy</em>, <em>xz</em>, and <em>yz</em> dimensions
+are controlled independently using their individual stress components
+as the driving forces, and the specified scalar pressure as the
+external normal stress.  Using &#8220;tri Ptarget&#8221; is the same as specifying
+these 7 keywords:</p>
+<div class="highlight-python"><div class="highlight"><pre>x Ptarget
+y Ptarget
+z Ptarget
+xy 0.0
+yz 0.0
+xz 0.0
+couple none
+</pre></div>
+</div>
+<hr class="docutils" />
+<p>The <em>vmax</em> keyword can be used to limit the fractional change in the
+volume of the simulation box that can occur in one iteration of the
+minimizer.  If the pressure is not settling down during the
+minimization this can be because the volume is fluctuating too much.
+The specified fraction must be greater than 0.0 and should be &lt;&lt; 1.0.
+A value of 0.001 means the volume cannot change by more than 1/10 of a
+percent in one iteration when <em>couple xyz</em> has been specified.  For
+any other case it means no linear dimension of the simulation box can
+change by more than 1/10 of a percent.</p>
+<hr class="docutils" />
+<p>With this fix, the potential energy used by the minimizer is augmented
+by an additional energy provided by the fix. The overall objective
+function then is:</p>
+<img alt="_images/fix_box_relax1.jpg" class="align-center" src="_images/fix_box_relax1.jpg" />
+<p>where <em>U</em> is the system potential energy, <em>P*_t is the desired
+hydrostatic pressure, *V</em> and <em>V*_0 are the system and reference
+volumes, respectively.  *E*_*strain</em> is the strain energy expression
+proposed by Parrinello and Rahman <a class="reference internal" href="#parrinello1981"><span>(Parrinello1981)</span></a>.
+Taking derivatives of <em>E</em> w.r.t. the box dimensions, and setting these
+to zero, we find that at the minimum of the objective function, the
+global system stress tensor <strong>P</strong> will satisfy the relation:</p>
+<img alt="_images/fix_box_relax2.jpg" class="align-center" src="_images/fix_box_relax2.jpg" />
+<p>where <strong>I</strong> is the identity matrix, <strong>h**_0 is the box dimension tensor of
+the reference cell, and **h**_0*d* is the diagonal part of
+**h**_0. **S**_*t* is a symmetric stress tensor that is chosen by LIGGGHTS(R)-INL
+so that the upper-triangular components of **P</strong> equal the stress tensor
+specified by the user.</p>
+<p>This equation only applies when the box dimensions are equal to those
+of the reference dimensions. If this is not the case, then the
+converged stress tensor will not equal that specified by the user.  We
+can resolve this problem by periodically resetting the reference
+dimensions. The keyword <em>nreset_ref</em> controls how often this is done.
+If this keyword is not used, or is given a value of zero, then the
+reference dimensions are set to those of the initial simulation domain
+and are never changed. A value of <em>nstep</em> means that every <em>nstep</em>
+minimization steps, the reference dimensions are set to those of the
+current simulation domain. Note that resetting the reference
+dimensions changes the objective function and gradients, which
+sometimes causes the minimization to fail. This can be resolved by
+changing the value of <em>nreset</em>, or simply continuing the minimization
+from a restart file.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">As normally computed, pressure includes a kinetic-
+energy or temperature-dependent component; see the <a class="reference internal" href="compute_pressure.html"><em>compute pressure</em></a> command.  However, atom velocities are
+ignored during a minimization, and the applied pressure(s) specified
+with this command are assumed to only be the virial component of the
+pressure (the non-kinetic portion).  Thus if atoms have a non-zero
+temperature and you print the usual thermodynamic pressure, it may not
+appear the system is converging to your specified pressure.  The
+solution for this is to either (a) zero the velocities of all atoms
+before performing the minimization, or (b) make sure you are
+monitoring the pressure without its kinetic component.  The latter can
+be done by outputting the pressure from the fix this command creates
+(see below) or a pressure fix you define yourself.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Because pressure is often a very sensitive function of
+volume, it can be difficult for the minimizer to equilibrate the
+system the desired pressure with high precision, particularly for
+solids.  Some techniques that seem to help are (a) use the
+&#8220;min_modify line quadratic&#8221; option when minimizing with box
+relaxations, and (b) minimize several times in succession if need be,
+to drive the pressure closer to the target pressure.  Also note that
+some systems (e.g. liquids) will not sustain a non-hydrostatic applied
+pressure, which means the minimizer will not converge.</p>
+</div>
+<hr class="docutils" />
+<p>This fix computes a temperature and pressure each timestep.  The
+temperature is used to compute the kinetic contribution to the
+pressure, even though this is subsequently ignored by default.  To do
+this, the fix creates its own computes of style &#8220;temp&#8221; and &#8220;pressure&#8221;,
+as if these commands had been issued:</p>
+<div class="highlight-python"><div class="highlight"><pre>compute fix-ID_temp group-ID temp
+compute fix-ID_press group-ID pressure fix-ID_temp virial
+</pre></div>
+</div>
+<p>See the <code class="xref doc docutils literal"><span class="pre">compute</span> <span class="pre">temp</span></code> and <a class="reference internal" href="compute_pressure.html"><em>compute pressure</em></a> commands for details.  Note that the
+IDs of the new computes are the fix-ID + underscore + &#8220;temp&#8221; or fix_ID
++ underscore + &#8220;press&#8221;, and the group for the new computes is the same
+as the fix group.  Also note that the pressure compute does not
+include a kinetic component.</p>
+<p>You can change the attributes of this fix&#8217;s temperature or pressure via the
+<a class="reference internal" href="compute_modify.html"><em>compute_modify</em></a> command or print this temperature
+or pressure during thermodynamic output via the <a class="reference internal" href="thermo_style.html"><em>thermo_style custom</em></a> command using the appropriate compute-ID.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="restart-fix-modify-output-run-start-stop-minimize-info">
+<h2>Restart, fix_modify, output, run start/stop, minimize info<a class="headerlink" href="#restart-fix-modify-output-run-start-stop-minimize-info" title="Permalink to this headline">¶</a></h2>
+<p>No information about this fix is written to <a class="reference internal" href="restart.html"><em>binary restart files</em></a>.</p>
+<p>The <a class="reference internal" href="fix_modify.html"><em>fix_modify</em></a> <em>temp</em> and <em>press</em> options are
+supported by this fix.  You can use them to assign a
+<a class="reference internal" href="compute.html"><em>compute</em></a> you have defined to this fix which will be used
+in its temperature and pressure calculation, as described above.  Note
+that as described above, if you assign a pressure compute to this fix
+that includes a kinetic energy component it will affect the
+minimization, most likely in an undesirable way.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">If both the <em>temp</em> and <em>press</em> keywords are used in a
+single thermo_modify command (or in two separate commands), then the
+order in which the keywords are specified is important.  Note that a
+<a class="reference internal" href="compute_pressure.html"><em>pressure compute</em></a> defines its own temperature
+compute as an argument when it is specified.  The <em>temp</em> keyword will
+override this (for the pressure compute being used by fix npt), but
+only if the <em>temp</em> keyword comes after the <em>press</em> keyword.  If the
+<em>temp</em> keyword comes before the <em>press</em> keyword, then the new pressure
+compute specified by the <em>press</em> keyword will be unaffected by the
+<em>temp</em> setting.</p>
+</div>
+<p>This fix computes a global scalar which can be accessed by various
+<a class="reference internal" href="Section_howto.html#howto-8"><span>output commands</span></a>.  The scalar is the
+pressure-volume energy, plus the strain energy, if it exists.</p>
+<p>No parameter of this fix can be used with the <em>start/stop</em> keywords of
+the <a class="reference internal" href="run.html"><em>run</em></a> command.</p>
+<p>This fix is invoked during <code class="xref doc docutils literal"><span class="pre">energy</span> <span class="pre">minimization</span></code>, but
+not for the purpose of adding a contribution to the energy or forces
+being minimized.  Instead it alters the simulation box geometry as
+described above.</p>
+</div>
+<div class="section" id="restrictions">
+<h2>Restrictions<a class="headerlink" href="#restrictions" title="Permalink to this headline">¶</a></h2>
+<p>Only dimensions that are available can be adjusted by this fix.
+Non-periodic dimensions are not available.  <em>z</em>, <em>xz</em>, and <em>yz</em>, are
+not available for 2D simulations. <em>xy</em>, <em>xz</em>, and <em>yz</em> are only
+available if the simulation domain is non-orthogonal.  The
+<a class="reference internal" href="create_box.html"><em>create_box</em></a>, <a class="reference internal" href="read_data.html"><em>read data</em></a>, and
+<a class="reference internal" href="read_restart.html"><em>read_restart</em></a> commands specify whether the
+simulation box is orthogonal or non-orthogonal (triclinic) and explain
+the meaning of the xy,xz,yz tilt factors.</p>
+<p>The <em>scaleyz yes</em> and <em>scalexz yes</em> keyword/value pairs can not be used
+for 2D simulations. <em>scaleyz yes</em>, <em>scalexz yes</em>, and <em>scalexy yes</em> options
+can only be used if the 2nd dimension in the keyword is periodic,
+and if the tilt factor is not coupled to the barostat via keywords
+<em>tri</em>, <em>yz</em>, <em>xz</em>, and <em>xy</em>.</p>
+</div>
+<div class="section" id="related-commands">
+<h2>Related commands<a class="headerlink" href="#related-commands" title="Permalink to this headline">¶</a></h2>
+<p><code class="xref doc docutils literal"><span class="pre">fix</span> <span class="pre">npt</span></code>, <code class="xref doc docutils literal"><span class="pre">minimize</span></code></p>
+</div>
+<div class="section" id="default">
+<h2>Default<a class="headerlink" href="#default" title="Permalink to this headline">¶</a></h2>
+<p>The keyword defaults are dilate = all, vmax = 0.0001, nreset = 0.</p>
+<hr class="docutils" />
+<p id="parrinello1981"><strong>(Parrinello1981)</strong> Parrinello and Rahman, J Appl Phys, 52, 7182 (1981).</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, DCS Computing GmbH, JKU Linz and Sandia Corporation.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'v4.X',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: ''
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
+      });
+  </script> 
+
+</body>
+</html>

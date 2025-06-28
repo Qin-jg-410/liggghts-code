@@ -1,0 +1,51 @@
+<WaNoTemplate>
+
+   <WaNoMeta>
+      <Author>
+         <Name> Celso R. C. Rego </Name>
+         <Email>celsorego@kit.edu</Email>
+      </Author>
+
+      <Description>
+         This WaNo uses Liggghts functionalities to simulate the stress-strain curve of a granular material.
+      </Description>
+
+      <Keyword>Liggghts</Keyword>
+  </WaNoMeta>
+
+   <WaNoRoot name="KNOW-NOW_advanced">
+
+      <WaNoString name="Title">test</WaNoString>
+      <WaNoFloat description="velocity of pressing plate" name="velocity of pressing plate">5</WaNoFloat>
+
+      <WaNoInt name="total number of hard particles">10000</WaNoInt>
+
+      <WaNoMatrixFloat rows="2" cols="5" col_header="1; 2; 3; 4; 5" 
+      row_header="size; fraction" name="Class">[[0.1, 0.2, 0.3, 0.4, 0.5], [0.1, 0.2, 0.4, 0.2, 0.1]]</WaNoMatrixFloat>
+      <WaNoInt name="timesteps">20000</WaNoInt>
+      <WaNoInt name="dumprate trajectory">500</WaNoInt>
+      <WaNoInt name="dumprate vtk and stl">10000</WaNoInt>
+      
+
+      
+ 
+     
+
+   </WaNoRoot>
+   <WaNoExecCommand>
+      bash config.sh
+   </WaNoExecCommand>
+   
+   <WaNoInputFiles> 
+      <WaNoInputFile logical_filename="createInput.py">createInput.py</WaNoInputFile>
+      <WaNoInputFile logical_filename="csv_to_yaml.py">csv_to_yaml.py</WaNoInputFile>
+      <WaNoInputFile logical_filename="config.sh">config.sh</WaNoInputFile>
+      <WaNoInputFile logical_filename="top_wall.stl">top_wall.stl</WaNoInputFile>
+      <WaNoInputFile logical_filename="bottom_wall.stl">bottom_wall.stl</WaNoInputFile>
+      <WaNoInputFile logical_filename="Matrize.stl">Matrize.stl</WaNoInputFile>            
+   </WaNoInputFiles>
+   
+   <WaNoOutputFiles>
+      <WaNoOutputFile>forces_inputs.yml</WaNoOutputFile>
+   </WaNoOutputFiles>
+</WaNoTemplate>

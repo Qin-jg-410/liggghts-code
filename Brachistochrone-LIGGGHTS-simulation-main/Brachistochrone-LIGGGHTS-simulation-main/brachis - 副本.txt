@@ -1,0 +1,218 @@
+# Author: Mishal Mohanlal
+# Date: July 2024
+
+# Refer to the readme file n github regarding the LIGGGHTS coding etiquette
+# The below code is a general outline which needs to be altered based no material data for calibratino purposes
+
+
+### Preliminaries
+
+	units 		si
+	atom_style 	granular
+	atom_modify 	map array
+	boundary 	f f f  #boundaries, all particles leaving the bonudaries will be deleted
+	communicate 	single vel yes #default
+	newton off 	#default, used for multicore systems
+
+
+
+###########################################################################################################
+#					User Inputs
+###########################################################################################################
+
+# Declare domain
+
+	variable 	xmin equal -10
+	variable 	xmax equal 10
+
+	variable 	ymin equal -10
+	variable 	ymax equal 10
+
+	variable 	zmin equal -10
+	variable 	zmax equal 10
+	
+	variable 	amount_types equal 2
+ 		
+# Applying domian and types
+
+	region 	reg block ${xmin} ${xmax} ${ymin} ${ymax} ${zmin} ${zmax} units box
+	create_box 	${amount_types} reg #value to b changed based on the amount of types. currently, 1 = particles, 2 = mesh
+	neighbor 	0.002 bin #default
+	neigh_modify 	delay 0 #default
+	
+# Import Mesh and bucket lifting rate
+
+	fix 		bucket all mesh/surface file mesh/Brachistochrone.stl type 2 scale 0.001 curvature 1e-5
+	fix 		walls all wall/gran model hertz tangential history mesh n_meshes 1 meshes bucket
+
+
+# Time steps
+
+	variable 	dt equal 0.0001
+	variable 	fill_steps equal 20000
+	variable 	settle_steps equal 10000
+	variable 	lift_bucket_steps equal 90000
+
+
+ 	
+# Gravity
+
+	fix 		grav all gravity 9.81 vector 0 1 0.
+ 
+# Particle insertion location
+
+	region 	factory block 5.7 5.9 -4.2 -4 0 0.2 units box 
+	region 	factory2 block 5.7 5.9 -4.2 -4 1 1.2 units box 
+
+# Material properties 
+
+	# youngs modulus
+	
+		variable 	youngsmodulus1 equal 5e6
+		variable 	youngsmodulus2 equal 5e6
+
+	# poissions ratio
+	
+		variable 	poission1 equal 0.3
+		variable 	poission2 equal 0.3
+
+	# coefficient of restitution
+	
+		variable 	CoR11 equal 0.6
+		variable 	CoR12 equal 0.6
+		variable 	CoR21 equal 0.6
+		variable 	CoR22 equal 0.6
+
+	# sliding friction
+	
+		variable 	sf11 equal 0.3
+		variable 	sf12 equal 0.3
+		variable 	sf21 equal 0.3
+		variable 	sf22 equal 0
+
+	# rolling friction
+	
+		variable 	rf11 equal 0.01
+		variable 	rf12 equal 0.01
+		variable 	rf21 equal 0.01
+		variable 	rf22 equal 0.01
+
+	# Cohesion Energy Density
+	
+		variable 	ced11 equal 30000
+		variable 	ced12 equal 30000
+		variable 	ced21 equal 30000
+		variable 	ced22 equal 30000
+
+# Particle insertion
+ 
+	#fractions for the particles
+	
+		variable 	frac1 equal 0.008
+		variable 	frac2 equal 0.013
+		variable 	frac3 equal 0.043
+		variable 	frac4 equal 0.069
+		variable 	frac5 equal 0.135
+		variable 	frac6 equal 0.131
+		variable 	frac7 equal 0.6
+ 
+	# Radius of particles
+	
+		variable 	r1 equal 0.075
+		variable 	r2 equal 0.06
+		variable 	r3 equal 0.04
+		variable 	r4 equal 0.035
+		variable 	r5 equal 0.0325
+		variable 	r6 equal 0.03
+		variable 	r7 equal 0.025
+ 
+	# Mass rate
+	
+		variable 	mass_rate equal 500
+
+# Dump file rate
+
+	variable 	dmp_rate equal 250
+
+
+
+###########################################################################################################
+#						End of User Inputs
+###########################################################################################################
+
+
+
+
+
+###########################################################################################################
+#					Code Modifications required
+###########################################################################################################
+
+ 
+# Applying particle radius
+
+	# User to add additional lines based on the amount of particles
+
+	fix pts1 all particletemplate/sphere 15485863 atom_type 1 density constant 800 radius constant ${r1}
+	fix pts2 all particletemplate/sphere 15485867 atom_type 1 density constant 800 radius constant ${r2}
+	fix pts3 all particletemplate/sphere 32452843 atom_type 1 density constant 800 radius constant ${r3}
+	fix pts4 all particletemplate/sphere 32452867 atom_type 1 density constant 800 radius constant ${r4}
+	fix pts5 all particletemplate/sphere 49979687 atom_type 1 density constant 800 radius constant ${r5}
+	fix pts6 all particletemplate/sphere 49979693 atom_type 1 density constant 800 radius constant ${r6}
+	fix pts7 all particletemplate/sphere 67867967 atom_type 1 density constant 800 radius constant ${r7}
+
+# Applying particle properties
+
+	# User to add additional combinations based on the amount of particle types (refer to readme)
+
+	fix m1 all property/global youngsModulus peratomtype ${youngsmodulus1} ${youngsmodulus2}
+	fix m2 all property/global poissonsRatio peratomtype ${poission1} ${poission2}
+	fix m3 all property/global coefficientRestitution peratomtypepair 2 ${CoR11} ${CoR12} ${CoR21} ${CoR22}
+	fix m4 all property/global coefficientFriction peratomtypepair 2 ${sf11} ${sf12} ${sf21} ${sf22}
+	fix m5 all property/global coefficientRollingFriction peratomtypepair 2 ${rf11} ${rf12} ${rf21} ${rf22}
+	fix m6 all property/global cohesionEnergyDensity peratomtypepair 2 ${ced11} ${ced12} ${ced21} ${ced22}
+
+# Particle distribution
+
+	# User to add additional data based on the fractions of the material 
+
+	fix pdd all particledistribution/discrete 86028157 7 pts1 ${frac1} pts2 ${frac2} pts3 ${frac3} pts4 ${frac4} pts5 ${frac5} pts6 		${frac6} pts7 ${frac7} 
+
+###########################################################################################################
+#					End of Code Modifications 
+###########################################################################################################
+ 
+
+
+###########################################################################################################
+#					Simulation Code 
+###########################################################################################################
+ 
+ 
+# Particle model
+
+	# This can be changed according to the user requirements
+	
+	pair_style gran model hertz tangential history cohesion sjkr rolling_friction epsd2 #Hertzian with cohesion
+	pair_coeff  * *
+	fix integrate all nve/sphere
+
+# Material insertion
+
+	fix ins all insert/rate/region seed 86028121 distributiontemplate pdd mass INF massrate ${mass_rate} insert_every 1 overlapcheck 		yes all_in yes vel constant 0 0 0 region factory 
+
+	fix ins2 all insert/rate/region seed 86028121 distributiontemplate pdd mass INF massrate ${mass_rate} insert_every 1 overlapcheck 		yes all_in yes vel constant 0 0 0 region factory2
+
+# Saving data
+
+	dump   dmp all custom/vtk ${dmp_rate} post/particles_*.vtk id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz 		radius 
+	dump dmp_conveyor all mesh/stl ${dmp_rate} post/bucket*.stl bucket
+
+# Timestep
+	timestep ${dt}
+ 
+	run ${fill_steps}
+#	unfix ins
+
+#	run ${settle_steps}
+

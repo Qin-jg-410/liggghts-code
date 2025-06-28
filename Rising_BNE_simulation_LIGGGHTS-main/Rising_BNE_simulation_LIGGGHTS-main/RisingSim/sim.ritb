@@ -1,0 +1,270 @@
+#INITALIZATION
+atom_style      granular
+#atom_modify     map array	#no se para que es
+
+boundary	f f f			#fixed boundaries -> particles will be deleted if leaving the simulation box
+
+units		si
+
+communicate	single vel yes	#default
+
+newton		off				#default
+
+
+
+###################################System variables##################################################################
+
+#Definition of boundaries
+variable xmin equal -0.2
+variable xmax equal 0.2
+
+variable ymin equal -0.2
+variable ymax equal 0.2
+
+variable zmin equal -0.2
+variable zmax equal 0.3
+
+#Definition of the timestep
+
+variable dt equal 1e-6		#timestep = 0.00001 second; Each iteration step represents 0.0001 seconds.
+
+
+###################################Specific variables for current simulation#########################################
+
+variable natoms equal 3 	#1 -> granular #2->intruder #3->container
+
+####variable for material properties####
+
+####Young Modulus####
+variable	youngmodulus1	equal 	1e8		#N/mm²
+variable	youngmodulus2	equal 	1e8		#N/mm²
+variable	youngmodulus3	equal 	1e8		#N/mm²
+
+####Poission ratio####
+variable 	poission1	equal	0.3
+variable 	poission2	equal	0.3
+variable 	poission3	equal	0.3
+
+####variable for contact properties####
+
+####coefficient of restitution####
+variable	CoR11	equal	0.6
+variable	CoR12	equal	0.6
+variable	CoR13	equal	0.6	
+variable	CoR21	equal	0.6
+variable	CoR22	equal	0.6
+variable	CoR23	equal	0.6
+variable	CoR31	equal	0.6
+variable	CoR32	equal	0.6
+variable	CoR33	equal	0.6	
+
+####sliding friction coefficient####
+variable	sf11	equal	0.3
+variable	sf12	equal	0.3
+variable	sf13	equal	0.36
+variable	sf21	equal	0.3
+variable	sf22	equal	0.3
+variable	sf23	equal	0.36
+variable	sf31	equal	0.36
+variable	sf32	equal	0.36
+variable	sf33	equal	0.3
+
+####rolling friction coefficient####
+variable	rf11	equal	0.8
+variable	rf12	equal	0.8
+variable	rf13	equal	0.8
+variable	rf21	equal	0.8
+variable	rf22	equal	0.8
+variable	rf23	equal	0.8
+variable	rf31	equal	0.8
+variable	rf32	equal	0.8
+variable	rf33	equal	0.8
+
+
+
+
+
+####variable for particle1####
+
+#Number of particle radius
+variable	nradii1	equal	1
+
+variable	radius11	equal	0.0022	#m
+variable	radius12	equal	0.0300	#m
+
+variable	frac11	equal	1.0		#20%
+variable	frac12	equal	0.0		#80%
+
+variable	density1	equal	13	#kg/m³
+
+
+
+####variable for particle2####
+
+#Number of particle radius
+variable	nradii2	equal	1
+
+variable	radius21	equal	0.025	#m
+variable	radius22	equal	0.0300	#m
+
+variable	frac21	equal	1.0		#20%
+variable	frac22	equal	0.0		#80%
+
+variable	density2	equal	13	#kg/m³
+
+
+
+####filling parameters####
+
+variable	filltime	equal	2		#seconds
+
+variable	fillmass	equal	0.01	#kg
+
+variable	fillmassrate	equal	${fillmass}/${filltime}	#kg/s
+
+variable	fillsteps	equal	${filltime}/${dt}		#Transform time to iteration steps
+
+####settle time####
+
+variable	settletime	equal	1 #second
+
+variable	settlesteps	equal	${settletime}/${dt}		#Transform time to iteration steps
+
+
+####shaking time#####
+
+variable	shakingtime	equal	25 #seconds
+
+variable	shakingsteps	equal	${shakingtime}/${dt}	#Transform time to iteration steps
+
+
+####settle time 2####
+
+variable	settletime2	equal	1 #second
+
+variable	settlesteps2	equal	${settletime}/${dt}		#Transform time to iteration steps
+
+
+###################################Definition of simulationbox#######################################################
+
+region		reg block ${xmin} ${xmax} ${ymin} ${ymax} ${zmin} ${zmax} units box
+
+create_box	3 reg
+
+neighbor	0.004 bin		#default
+
+neigh_modify	delay 0		#default
+
+#################################Definition of the contact models####################################################
+
+pair_style gran model hertz tangential history rolling_friction epsd2	#contact model
+
+pair_coeff	* *				#default
+
+timestep ${dt}
+
+thermo          5000
+
+fix		integrator all nve/sphere			#default
+
+fix		gravi all gravity 9.81 vector 0.0 0.0 -1.0		#gravity of 9.81 m/s² in negative z direction
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+###################################Definition of Material properties#################################################
+
+
+fix 		m1 all property/global youngsModulus peratomtype ${youngmodulus1} ${youngmodulus2} ${youngmodulus3}
+
+fix 		m2 all property/global poissonsRatio peratomtype ${poission1} ${poission2} ${poission3}
+
+fix 		m3 all property/global coefficientRestitution peratomtypepair ${natoms} 0.6 0.6 0.6 0.6 0.6 0.6 0.6 0.6 0.6
+
+fix 		m4 all property/global coefficientFriction peratomtypepair ${natoms} ${sf11} ${sf12} ${sf13} ${sf21} ${sf22}  ${sf23} ${sf31} ${sf32}  ${sf33}
+
+fix 		m5 all property/global coefficientRollingFriction peratomtypepair ${natoms} ${rf11} ${rf12} ${rf13} ${rf21} ${rf22} ${rf23} ${rf31} ${rf32} ${rf33}
+
+
+
+
+###################################Generation and Loading of the Geometry .stl#######################################
+
+fix			container 	all mesh/surface file meshes/cylinder.stl	type 3  #load mesh from STL file. Type 3 for geometry. Scale down to transform mm to meters          
+
+
+fix 		walls 	all wall/gran model hertz tangential history rolling_friction epsd2 mesh n_meshes 1 meshes container
+
+
+
+###################################Generation and Insertion of the particles#########################################
+
+fix		pts1 all particletemplate/sphere 10487 atom_type 1 density constant ${density1} radius constant ${radius11}	
+
+fix		intr all particletemplate/sphere 11887 atom_type 2 density constant ${density2} radius constant ${radius21}	
+
+fix 	pdd1 all particledistribution/discrete 32452867 ${nradii1} pts1 ${frac11}
+fix 	pdd2 all particledistribution/discrete 17903 ${nradii2} intr ${frac21}
+
+#fix		ins_mesh all mesh/surface/planar file Insertionsface.stl type 1 scale 0.001 
+
+region reg_intr cylinder z 0 0 0.048 0.002 0.188 units box
+region reg_part cylinder z 0 0 0.048 0.002 0.188 units box
+
+fix             ins_intr all insert/pack seed 10000139 distributiontemplate pdd2 insert_every once overlapcheck yes all_in yes region reg_intr particles_in_region 1
+
+fix             ins_part all insert/pack seed 10000139 distributiontemplate pdd1 insert_every once overlapcheck yes all_in yes region reg_part particles_in_region 15000
+
+#fix 	ins all insert/stream seed 86028157 distributiontemplate pdd1 &
+        mass ${fillmass} massrate ${fillmassrate} overlapcheck yes all_in yes vel constant 0 0 -0.75 &
+        insertion_face ins_mesh extrude_length 0.25
+
+
+###################################Dumping of the data for post-processing to visualize############################
+
+shell 	mkdir post
+
+#Definition of the dumptime
+
+variable dumptime equal 0.01	# Every 0.05 s 1 image 
+
+variable dumpstep equal ${dumptime}/${dt}	#Transform to iteration steps
+
+
+dump	dmpparticle all custom/vtk ${dumpstep} post/particles_*.vtk id type x y z vx vy vz fx fy fz radius mass
+#dump	dmpintruder all custom/vtk ${dumpstep} post/intruder_*.vtk id type x y z vx vy vz fx fy fz radius mass
+dump	dmpcontainer all mesh/stl ${dumpstep} post/container*.stl container
+
+
+
+####################################RUN the simulation filling###########################################################
+
+run	 ${fillsteps}
+
+unfix	ins_intr
+unfix	ins_part
+
+##################################RUN the simulation settling#############################################################
+
+run	 ${settlesteps}
+
+#################################RUN the simulation shaking#############################################################
+fix             shaking all move/mesh mesh container wiggle amplitude 0 0 0.1 period 0.01666 #Gamma = 4
+run	 ${shakingsteps}
+unfix           shaking
+
+
+#################################RUN the simulation settling 2 ###############################################################
+
+run	 ${settlesteps2}
+
